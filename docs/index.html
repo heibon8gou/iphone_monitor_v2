@@ -57,20 +57,20 @@
                 <!-- Dropdowns -->
                 <div class="flex flex-wrap gap-2">
                     <select id="filter-model"
-                        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        class="border border-gray-300 rounded px-3 py-2 text-base md:text-sm focus:outline-none focus:border-blue-500 w-full md:w-auto">
                         <option value="All">All Models</option>
                     </select>
                     <select id="filter-storage"
-                        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        class="border border-gray-300 rounded px-3 py-2 text-base md:text-sm focus:outline-none focus:border-blue-500 w-full md:w-auto">
                         <option value="All">All Storage</option>
                     </select>
                     <select id="filter-color"
-                        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        class="border border-gray-300 rounded px-3 py-2 text-base md:text-sm focus:outline-none focus:border-blue-500 w-full md:w-auto">
                         <option value="All">All Colors</option>
                     </select>
                     <label
-                        class="inline-flex items-center bg-gray-50 border border-gray-300 rounded px-3 py-2 cursor-pointer hover:bg-gray-100">
-                        <input type="checkbox" id="filter-stock" class="form-checkbox h-4 w-4 text-blue-600">
+                        class="inline-flex items-center bg-gray-50 border border-gray-300 rounded px-3 py-2 cursor-pointer hover:bg-gray-100 w-full md:w-auto justify-center md:justify-start">
+                        <input type="checkbox" id="filter-stock" class="form-checkbox h-5 w-5 text-blue-600">
                         <span class="ml-2 text-gray-700 text-sm font-medium">In Stock Only</span>
                     </label>
                 </div>
@@ -78,9 +78,9 @@
 
             <!-- Right: Sort -->
             <div class="flex items-center gap-2 w-full md:w-auto justify-end">
-                <label for="sort-select" class="font-bold text-gray-700">Sort:</label>
+                <label for="sort-select" class="font-bold text-gray-700 whitespace-nowrap">Sort:</label>
                 <select id="sort-select"
-                    class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                    class="border border-gray-300 rounded px-3 py-2 text-base md:text-sm focus:outline-none focus:border-blue-500 w-full md:w-auto">
                     <option value="price_asc">Price: Low to High</option>
                     <option value="model_asc">Model Name</option>
                 </select>
@@ -369,54 +369,111 @@
 
             filtered.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = `block md:table-row bg-white hover:bg-gray-50 transition-colors ${item.isLowest ? 'border-l-4 border-l-yellow-400 md:border-l-0' : ''}`;
+                // Mobile: block (card container), Desktop: table-row
+                // Border/Last-child logic handled by CSS or container
+                tr.className = `block md:table-row bg-white mobile-card border-b border-gray-200 md:border-b-0 ${item.isLowest ? 'ring-2 ring-yellow-400 ring-inset md:ring-0' : ''}`;
 
-                // Styling helpers
-                const isLowestClass = item.isLowest ? 'text-red-600 font-bold' : 'text-gray-900';
-                const lowestBadge = item.isLowest ? `<span class="inline-block md:hidden ml-2 px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">Best Price</span>` : '';
-                const lowestBadgeDesktop = item.isLowest ? `<span class="hidden md:inline-block ml-2 px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">No.1</span>` : '';
+                // Values
+                const carrierColor = getCarrierColor(item.carrier);
+                // Points
+                const ptsVal = item.points_awarded > 0 ? `-${item.points_awarded.toLocaleString()}` : '-';
+                const ptsLabel = item.points_awarded > 0 ? 'pts' : '';
 
-                const pointsDisplay = item.points_awarded > 0 ? `<span class="text-green-600 font-medium">-${item.points_awarded.toLocaleString()} pts</span>` : '<span class="text-gray-300">-</span>';
+                // Prices
+                const grossPrice = (item.price_gross || 0).toLocaleString();
+                const rentPrice = (item.price_effective_rent || 0).toLocaleString();
+                const buyoutPrice = (item.price_effective_buyout || 0).toLocaleString();
 
-                tr.innerHTML = `
-                    <td class="p-4 block md:table-cell" data-label="Model">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Model:</span>
-                        <span class="font-medium text-lg md:text-base">${item.model}</span>
-                    </td>
-                    <td class="p-4 block md:table-cell" data-label="Storage">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Storage:</span>
-                        ${item.storage}
-                    </td>
-                    <td class="p-4 block md:table-cell" data-label="Carrier">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Carrier:</span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCarrierColor(item.carrier)}">
-                            ${item.carrier}
-                        </span>
-                    </td>
-                    <td class="p-4 block md:table-cell text-left md:text-right" data-label="Gross Price">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Gross:</span>
-                        <span class="line-through text-gray-400 text-sm">¥${(item.price_gross || 0).toLocaleString()}</span>
-                    </td>
-                    <td class="p-4 block md:table-cell text-left md:text-right" data-label="Buyout (Effective)">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Buyout:</span>
-                        <span class="text-gray-700 font-medium">¥${(item.price_effective_buyout || 0).toLocaleString()}</span>
-                    </td>
-                    <td class="p-4 block md:table-cell text-left md:text-right" data-label="Points">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Points:</span>
-                        ${pointsDisplay}
-                    </td>
-                    <td class="p-4 block md:table-cell text-left md:text-right" data-label="Rent Price">
-                        <span class="md:hidden font-bold text-gray-500 w-24 inline-block">Rent:</span>
-                        <span class="${isLowestClass} text-lg">¥${(item.price_effective_rent || 0).toLocaleString()}</span>
-                        ${lowestBadge} ${lowestBadgeDesktop}
-                        ${item.program_exemption > 0 ? '<br><span class="text-xs text-green-600">Return Program</span>' : ''}
-                    </td>
-                    <td class="p-4 block md:table-cell text-center" data-label="Action">
-                        <a href="${item.url}" target="_blank" class="inline-block w-full md:w-auto text-center px-4 py-2 border border-blue-600 rounded text-blue-600 hover:bg-blue-50 text-sm font-medium transition-colors">
-                            Official Site
+                const isLowestText = item.isLowest ? 'text-red-600 font-bold' : 'text-gray-900 font-bold';
+                const lowestBadge = item.isLowest ? `<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded font-bold ml-2">最安</span>` : '';
+
+                // Stock status (Summarized for card)
+                let stockStatus = '<span class="text-gray-400">-</span>';
+                if (item.variants && item.variants.length > 0) {
+                    const anyInStock = item.variants.some(v => v.stock_available);
+                    if (anyInStock) {
+                        stockStatus = '<span class="text-blue-600 font-bold text-lg">○</span>';
+                    } else {
+                        stockStatus = '<span class="text-red-600 font-bold text-lg">×</span>';
+                    }
+                }
+
+                // --- Mobile Card Content (Single TD) ---
+                const mobileCard = `
+                    <td class="md:hidden block p-4">
+                        <!-- Header: Carrier + Model + Storage -->
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="inline-block px-2 py-0.5 text-xs font-bold rounded mb-1 ${carrierColor}">${item.carrier}</span>
+                                <h3 class="text-lg font-bold text-gray-900 leading-tight">
+                                    ${item.model} 
+                                    <span class="text-sm font-normal text-gray-500 ml-1">${item.storage}</span>
+                                </h3>
+                            </div>
+                            ${lowestBadge}
+                        </div>
+                        
+                        <!-- Main Price: Effective Rent -->
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="text-sm text-gray-500">実質負担:</span>
+                            <span class="text-2xl ${isLowestText}">¥${rentPrice}</span>
+                            ${item.program_exemption > 0 ? '<span class="text-xs text-green-600 border border-green-200 px-1 rounded">返却P</span>' : ''}
+                        </div>
+                        
+                        <!-- Sub Prices -->
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 mb-4">
+                            <div class="flex justify-between border-b border-gray-100 pb-1">
+                                <span>定価:</span>
+                                <span class="line-through text-gray-400">¥${grossPrice}</span>
+                            </div>
+                            <div class="flex justify-between border-b border-gray-100 pb-1">
+                                <span>一括実質:</span>
+                                <span>¥${buyoutPrice}</span>
+                            </div>
+                            <div class="flex justify-between border-b border-gray-100 pb-1">
+                                <span>ポイント:</span>
+                                <span class="text-green-600 font-medium">${ptsVal}${ptsLabel}</span>
+                            </div>
+                             <!-- Stock -->
+                             <div class="flex justify-between border-b border-gray-100 pb-1 items-center">
+                                <span>在庫:</span>
+                                ${stockStatus}
+                            </div>
+                        </div>
+                        
+                        <!-- Action -->
+                        <a href="${item.url}" target="_blank" class="block w-full bg-blue-600 text-white text-center font-bold py-3 rounded-lg hover:bg-blue-700 transition active:scale-95 shadow-sm">
+                            公式サイトへ
                         </a>
                     </td>
                 `;
+
+                // --- Desktop Table Content (Standard TDs) ---
+                const desktopColumns = `
+                    <td class="hidden md:table-cell p-4 font-medium">${item.model}</td>
+                    <td class="hidden md:table-cell p-4 text-gray-600">${item.storage}</td>
+                    <td class="hidden md:table-cell p-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${carrierColor}">
+                            ${item.carrier}
+                        </span>
+                    </td>
+                    <td class="hidden md:table-cell p-4 text-right text-gray-400 line-through text-sm">¥${grossPrice}</td>
+                    <td class="hidden md:table-cell p-4 text-right font-medium">¥${buyoutPrice}</td>
+                    <td class="hidden md:table-cell p-4 text-right text-green-600 font-medium">${ptsVal}${ptsLabel}</td>
+                    <td class="hidden md:table-cell p-4 text-right">
+                        <div>
+                            <span class="${isLowestText} text-base">¥${rentPrice}</span>
+                            ${item.program_exemption > 0 ? '<br><span class="text-xs text-green-600">Return Program</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="hidden md:table-cell p-4 text-center">
+                         <a href="${item.url}" target="_blank" class="inline-block px-4 py-2 border border-blue-600 rounded text-blue-600 hover:bg-blue-50 text-sm font-medium transition-colors">
+                            Visit
+                        </a>
+                    </td>
+                `;
+
+                tr.innerHTML = mobileCard + desktopColumns;
                 productListEl.appendChild(tr);
             });
         }
