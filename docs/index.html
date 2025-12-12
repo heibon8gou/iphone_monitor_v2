@@ -376,7 +376,7 @@
 
             filtered.forEach(item => {
                 const imgUrl = getProductImage(item.model);
-                const carrierClass = getCarrierColor(item.carrier);
+                // const carrierClass = getCarrierColor(item.carrier); // Removed
                 const carrierName = getCarrierDisplayName(item.carrier);
                 const isLowest = item.isLowest;
 
@@ -417,7 +417,8 @@
                                     <h3 class="text-base font-bold text-gray-900 leading-tight">${item.model}</h3>
                                     <p class="text-xs text-gray-500">${item.storage}</p>
                                 </div>
-                                <span class="px-2 py-1 rounded text-[10px] font-bold ${carrierClass}">${carrierName}</span>
+                                </div>
+                                <img src="${getCarrierLogoPath(item.carrier)}" alt="${carrierName}" class="h-5 w-auto object-contain">
                             </div>
                             
                             <!-- Price Block -->
@@ -449,7 +450,7 @@
                     <td class="p-4"><img src="${imgUrl}" class="w-10 h-10 object-contain"></td>
                     <td class="p-4 font-bold text-gray-700">${item.model}</td>
                     <td class="p-4 text-gray-500 text-sm">${item.storage}</td>
-                    <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${carrierClass}">${carrierName}</span></td>
+                    <td class="p-4"><img src="${getCarrierLogoPath(item.carrier)}" alt="${carrierName}" class="h-6 w-auto object-contain"></td>
                     <td class="p-4 text-right text-sm text-gray-400">¥${fmtSub}</td>
                     <td class="p-4 text-right font-bold text-red-600 text-lg">
                         ¥${fmtMain}
@@ -465,11 +466,11 @@
             });
         }
 
-        function getCarrierColor(carrier) {
-            if (carrier === 'Rakuten') return 'bg-[#ff008c] text-white font-bold';
-            if (carrier === 'ahamo') return 'bg-[#f4ee0b] text-black font-bold';
-            if (carrier === 'UQ mobile') return 'bg-[#0091d7] text-white font-bold';
-            return 'bg-gray-500 text-white font-bold';
+        function getCarrierLogoPath(carrier) {
+            if (carrier === 'Rakuten') return './images/logo_rakuten.png';
+            if (carrier === 'ahamo') return './images/logo_ahamo.png';
+            if (carrier === 'UQ mobile') return './images/logo_uq.png';
+            return '';
         }
 
         function getCarrierDisplayName(carrier) {
