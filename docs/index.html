@@ -69,27 +69,27 @@
                 <!-- Carriers Filters -->
                 <div class="space-y-1">
                     <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">キャリア</h2>
-                    <div class="flex gap-2" id="carrier-filters">
-                        <!-- Checkboxes styled as badges -->
-                        <label class="cursor-pointer select-none">
+                    <div class="flex flex-wrap gap-3" id="carrier-filters">
+                        <!-- Checkboxes styled as logo tiles -->
+                        <label class="cursor-pointer select-none group">
                             <input type="checkbox" class="filter-carrier peer hidden" value="Rakuten" checked>
                             <div
-                                class="px-3 py-1.5 rounded-full text-xs font-bold bg-gray-200 text-gray-500 peer-checked:bg-[#ff008c] peer-checked:text-white transition-colors">
-                                楽天モバイル
+                                class="h-12 px-4 rounded-xl border-2 border-transparent bg-white shadow-sm flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-pink-500 peer-checked:shadow-md">
+                                <img src="./images/logo_rakuten.png" alt="楽天モバイル" class="h-6 w-auto object-contain">
                             </div>
                         </label>
-                        <label class="cursor-pointer select-none">
+                        <label class="cursor-pointer select-none group">
                             <input type="checkbox" class="filter-carrier peer hidden" value="ahamo" checked>
                             <div
-                                class="px-3 py-1.5 rounded-full text-xs font-bold bg-gray-200 text-gray-500 peer-checked:bg-[#f4ee0b] peer-checked:text-black transition-colors">
-                                ahamo
+                                class="h-12 px-4 rounded-xl border-2 border-transparent bg-white shadow-sm flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-green-500 peer-checked:shadow-md">
+                                <img src="./images/logo_ahamo.png" alt="ahamo" class="h-6 w-auto object-contain">
                             </div>
                         </label>
-                        <label class="cursor-pointer select-none">
+                        <label class="cursor-pointer select-none group">
                             <input type="checkbox" class="filter-carrier peer hidden" value="UQ mobile" checked>
                             <div
-                                class="px-3 py-1.5 rounded-full text-xs font-bold bg-gray-200 text-gray-500 peer-checked:bg-[#0091d7] peer-checked:text-white transition-colors">
-                                UQ mobile
+                                class="h-12 px-4 rounded-xl border-2 border-transparent bg-white shadow-sm flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-blue-500 peer-checked:shadow-md">
+                                <img src="./images/logo_uq.png" alt="UQ mobile" class="h-6 w-auto object-contain">
                             </div>
                         </label>
                     </div>
@@ -450,7 +450,7 @@
                     <td class="p-4"><img src="${imgUrl}" class="w-10 h-10 object-contain"></td>
                     <td class="p-4 font-bold text-gray-700">${item.model}</td>
                     <td class="p-4 text-gray-500 text-sm">${item.storage}</td>
-                    <td class="p-4"><img src="${getCarrierLogoPath(item.carrier)}" alt="${carrierName}" class="h-6 w-auto object-contain"></td>
+                    <td class="p-4"><img src="${getCarrierLogoPath(item.carrier)}" alt="${carrierName}" class="h-8 w-24 object-contain"></td>
                     <td class="p-4 text-right text-sm text-gray-400">¥${fmtSub}</td>
                     <td class="p-4 text-right font-bold text-red-600 text-lg">
                         ¥${fmtMain}
