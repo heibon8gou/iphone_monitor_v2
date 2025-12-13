@@ -5,7 +5,7 @@ const BASE_URL = config.baseUrl.endsWith('/') ? config.baseUrl : config.baseUrl 
 
 // Constants
 const INITIAL_DISPLAY_COUNT = 5;
-const LOAD_INCREMENT = 10;
+const LOAD_INCREMENT = 5;
 
 // State
 let allData = [];
