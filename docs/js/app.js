@@ -460,7 +460,7 @@ function render() { // Filter & Sort
         ${lowestBadge}
             <div class="flex gap-4 items-start">
                 <div class="w-20 h-24 flex-shrink-0 bg-gray-50 rounded-xl flex items-center justify-center p-2 group-hover:bg-blue-50/50 transition-colors">
-                    <img src="${imgUrl}" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110">
+                    <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://placehold.co/200x250/e2e8f0/64748b?text=No+Image'; this.classList.add('opacity-50');" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110">
                 </div>
                 <div class="flex-grow min-w-0">
                     <div class="flex flex-col gap-1 items-start mb-2">
@@ -504,6 +504,13 @@ function getCarrierDisplayName(carrier) {
 }
 
 function getProductImage(model) {
-    const text = model.replace(/\s+/g, '+');
-    return `https://placehold.co/150x180/f3f4f6/333333?text=${text}`;
+    let clean = model.toLowerCase();
+    // Special handling for SE with 3rd Gen
+    if (clean.includes('se') && (clean.includes('3') || clean.includes('第3'))) {
+        clean = 'iphonese3';
+    } else {
+        // Keep alphanumeric only
+        clean = clean.replace(/[^a-z0-9]/g, '');
+    }
+    return BASE_URL + 'images/' + clean + '.png';
 }
