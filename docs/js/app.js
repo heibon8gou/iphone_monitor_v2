@@ -4,7 +4,7 @@ const config = window.iPhoneMonitorConfig || { baseUrl: './' };
 const BASE_URL = config.baseUrl.endsWith('/') ? config.baseUrl : config.baseUrl + '/';
 
 // Constants
-const INITIAL_DISPLAY_COUNT = 10;
+const INITIAL_DISPLAY_COUNT = 5;
 const LOAD_INCREMENT = 10;
 
 // State
@@ -18,7 +18,7 @@ let displayedCount = INITIAL_DISPLAY_COUNT;
 
 // DOM Elements Reference
 let appContainer;
-let updatedAtEl, errorMessageEl, errorTextEl, loadingEl, productContainerEl, mobileListEl, noResultsEl, loadMoreBtn;
+let updatedAtEl, errorMessageEl, errorTextEl, loadingEl, productContainerEl, mobileListEl, noResultsEl, loadMoreBtn, closeListBtn;
 // let carrierCheckboxes, modelContainer, storageContainer; // Re-queried dynamically
 let modeRentBtn, modeBuyoutBtn, sortSelect, thPriceDisplay;
 
@@ -135,10 +135,13 @@ function renderAppStructure() {
         <div id="product-container" class="hidden">
             <div id="mobile-list" class="grid grid-cols-1 gap-6"></div>
             
-            <!-- Load More Button -->
-            <div class="mt-8 text-center">
+            <!-- Load More & Close Buttons -->
+            <div class="mt-8 flex flex-col md:flex-row gap-3 justify-center items-center">
                 <button id="load-more-btn" class="hidden w-full md:w-auto md:px-12 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors shadow-sm active:scale-95">
                     もっと見る (+10件)
+                </button>
+                <button id="close-list-btn" class="hidden w-full md:w-auto md:px-8 py-3 bg-white text-gray-600 font-bold border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors shadow-sm active:scale-95">
+                    閉じる
                 </button>
             </div>
 
@@ -162,6 +165,7 @@ function grabElements() {
     mobileListEl = document.getElementById('mobile-list');
     noResultsEl = document.getElementById('no-results');
     loadMoreBtn = document.getElementById('load-more-btn');
+    closeListBtn = document.getElementById('close-list-btn');
 
     modeRentBtn = document.getElementById('mode-rent');
     modeBuyoutBtn = document.getElementById('mode-buyout');
@@ -197,6 +201,18 @@ function setupEventListeners() {
         loadMoreBtn.onclick = () => {
             displayedCount += LOAD_INCREMENT;
             render();
+        };
+    }
+
+    if (closeListBtn) {
+        closeListBtn.onclick = () => {
+            displayedCount = INITIAL_DISPLAY_COUNT;
+            render();
+            // Scroll back to top of product container or filter area
+            const scrollTarget = document.getElementById('monitor-app'); // Or filter area
+            if (scrollTarget) {
+                scrollTarget.scrollIntoView({ behavior: 'smooth' });
+            }
         };
     }
 }
@@ -254,7 +270,7 @@ function populateFilterChips(items) {
     modelContainer.innerHTML = '';
     models.forEach(m => {
         const btn = document.createElement('button');
-        btn.textContent = (m === 'All') ? '全て' : m.replace('iPhone ', '');
+        btn.textContent = (m === 'All') ? '全て' : (m.startsWith('iPhone') ? m : 'iPhone ' + m);
         btn.className = getChipClass(m === selectedModel);
         btn.onclick = () => {
             selectedModel = m;
@@ -299,7 +315,7 @@ function updateChipStyles(container, selectedValue, allLabel) {
     if (!container) return;
     Array.from(container.children).forEach(btn => {
         const label = btn.textContent;
-        const isSelected = (label === selectedValue.replace('iPhone ', '')) || (label === allLabel && selectedValue === 'All') || (label === selectedValue);
+        const isSelected = (label === selectedValue.replace('iPhone ', '')) || (label === allLabel && selectedValue === 'All') || (label === selectedValue) || (selectedValue !== 'All' && label === (selectedValue.startsWith('iPhone') ? selectedValue : 'iPhone ' + selectedValue));
         btn.className = getChipClass(isSelected);
     });
 }
@@ -396,14 +412,24 @@ function render() { // Filter & Sort
         if (noResultsEl) noResultsEl.classList.add('hidden');
     }
 
-    // Load More Logic
+    // Load More & Close Logic
     const hasMore = currentFilteredData.length > displayedCount;
+    const isExpanded = displayedCount > INITIAL_DISPLAY_COUNT;
+
     if (loadMoreBtn) {
         if (hasMore) {
             loadMoreBtn.classList.remove('hidden');
-            loadMoreBtn.textContent = `もっと見る（あと${currentFilteredData.length - displayedCount} 件）`;
+            loadMoreBtn.textContent = `もっと見る（あと${currentFilteredData.length - displayedCount}件）`;
         } else {
             loadMoreBtn.classList.add('hidden');
+        }
+    }
+
+    if (closeListBtn) {
+        if (isExpanded) {
+            closeListBtn.classList.remove('hidden');
+        } else {
+            closeListBtn.classList.add('hidden');
         }
     }
 
