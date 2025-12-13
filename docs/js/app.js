@@ -1,7 +1,7 @@
 // Config & Base URL
-const config = window.iPhoneMonitorConfig || { baseUrl: './' };
+const config = window.iPhoneMonitorConfig || {};
 // Ensure baseUrl ends with /
-const BASE_URL = config.baseUrl.endsWith('/') ? config.baseUrl : config.baseUrl + '/';
+const BASE_URL = config.baseUrl ? config.baseUrl.replace(/\/?$/, '/') : './';
 
 // Constants
 const INITIAL_DISPLAY_COUNT = 5;
