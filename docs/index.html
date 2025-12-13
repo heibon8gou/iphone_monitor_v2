@@ -203,212 +203,214 @@
                         .map(c => c.value);
                     render();
                 });
-                // Sort Change
-                sortSelect.addEventListener('change', (e) => {
-                    sortOrder = e.target.value;
-                    render();
-                });
-            }
+            });
+
+            // Sort Change
+            sortSelect.addEventListener('change', (e) => {
+                sortOrder = e.target.value;
+                render();
+            });
+        }
 
         async function fetchData() {
-                    try {
-                        const response = await fetch('./data.json');
-                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                        const data = await response.json();
+            try {
+                const response = await fetch('./data.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
 
-                        updatedAtEl.textContent = data.updated_at || '不明';
-                        allData = data.items;
+                updatedAtEl.textContent = data.updated_at || '不明';
+                allData = data.items;
 
-                        populateFilterChips(allData);
-                        markLowestPrices(allData);
+                populateFilterChips(allData);
+                markLowestPrices(allData);
 
-                        loadingEl.classList.add('hidden');
-                        productContainerEl.classList.remove('hidden');
-                        render();
+                loadingEl.classList.add('hidden');
+                productContainerEl.classList.remove('hidden');
+                render();
 
-                    } catch (err) {
-                        console.error(err);
-                        loadingEl.classList.add('hidden');
-                        errorMessageEl.classList.remove('hidden');
-                        errorTextEl.textContent = err.message;
-                    }
-                }
+            } catch (err) {
+                console.error(err);
+                loadingEl.classList.add('hidden');
+                errorMessageEl.classList.remove('hidden');
+                errorTextEl.textContent = err.message;
+            }
+        }
 
         function populateFilterChips(items) {
-                    // --- Models ---
-                    const models = [...new Set(items.map(i => i.model))];
-                    models.sort((a, b) => {
-                        const getNum = (s) => {
-                            if (s.includes('SE')) return -1;
-                            const match = s.match(/iPhone\s*(\d+)/);
-                            return match ? parseInt(match[1]) : 0;
-                        };
-                        const numA = getNum(a);
-                        const numB = getNum(b);
-                        if (numA !== numB) return numB - numA; // Descending
-                        return a.localeCompare(b);
-                    });
-                    models.unshift('All'); // Add All option
+            // --- Models ---
+            const models = [...new Set(items.map(i => i.model))];
+            models.sort((a, b) => {
+                const getNum = (s) => {
+                    if (s.includes('SE')) return -1;
+                    const match = s.match(/iPhone\s*(\d+)/);
+                    return match ? parseInt(match[1]) : 0;
+                };
+                const numA = getNum(a);
+                const numB = getNum(b);
+                if (numA !== numB) return numB - numA; // Descending
+                return a.localeCompare(b);
+            });
+            models.unshift('All'); // Add All option
 
-                    modelContainer.innerHTML = '';
-                    models.forEach(m => {
-                        const btn = document.createElement('button');
-                        btn.textContent = (m === 'All') ? '全て' : m.replace('iPhone ', '');
-                        btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${m === selectedModel
-                            ? 'bg-gray-900 text-white border-gray-900 shadow-md'
-                            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                            }`;
-                        btn.onclick = () => {
-                            selectedModel = m;
-                            updateChipStyles(modelContainer, m, '全て');
-                            render();
-                        };
-                        modelContainer.appendChild(btn);
-                    });
+            modelContainer.innerHTML = '';
+            models.forEach(m => {
+                const btn = document.createElement('button');
+                btn.textContent = (m === 'All') ? '全て' : m.replace('iPhone ', '');
+                btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${m === selectedModel
+                    ? 'bg-gray-900 text-white border-gray-900 shadow-md'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`;
+                btn.onclick = () => {
+                    selectedModel = m;
+                    updateChipStyles(modelContainer, m, '全て');
+                    render();
+                };
+                modelContainer.appendChild(btn);
+            });
 
-                    // --- Storage ---
-                    // Sort logic
-                    const storages = [...new Set(items.map(i => i.storage))];
-                    storages.sort((a, b) => {
-                        const parse = (s) => (s.includes('TB') ? parseInt(s) * 1024 : parseInt(s) || 9999);
-                        return parse(a) - parse(b);
-                    });
-                    storages.unshift('All');
+            // --- Storage ---
+            // Sort logic
+            const storages = [...new Set(items.map(i => i.storage))];
+            storages.sort((a, b) => {
+                const parse = (s) => (s.includes('TB') ? parseInt(s) * 1024 : parseInt(s) || 9999);
+                return parse(a) - parse(b);
+            });
+            storages.unshift('All');
 
-                    storageContainer.innerHTML = '';
-                    storages.forEach(s => {
-                        const btn = document.createElement('button');
-                        btn.textContent = (s === 'All') ? '全て' : s;
-                        btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${s === selectedStorage
-                            ? 'bg-gray-900 text-white border-gray-900 shadow-md'
-                            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                            }`;
-                        btn.onclick = () => {
-                            selectedStorage = s;
-                            updateChipStyles(storageContainer, s, '全て');
-                            render();
-                        };
-                        storageContainer.appendChild(btn);
-                    });
-                }
+            storageContainer.innerHTML = '';
+            storages.forEach(s => {
+                const btn = document.createElement('button');
+                btn.textContent = (s === 'All') ? '全て' : s;
+                btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${s === selectedStorage
+                    ? 'bg-gray-900 text-white border-gray-900 shadow-md'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`;
+                btn.onclick = () => {
+                    selectedStorage = s;
+                    updateChipStyles(storageContainer, s, '全て');
+                    render();
+                };
+                storageContainer.appendChild(btn);
+            });
+        }
 
         function updateChipStyles(container, selectedValue, allLabel) {
-                    Array.from(container.children).forEach(btn => {
-                        const label = btn.textContent;
-                        // Simple check against label or 'iPhone ' prefix logic
-                        const isSelected = (label === selectedValue.replace('iPhone ', '')) || (label === allLabel && selectedValue === 'All') || (label === selectedValue);
+            Array.from(container.children).forEach(btn => {
+                const label = btn.textContent;
+                // Simple check against label or 'iPhone ' prefix logic
+                const isSelected = (label === selectedValue.replace('iPhone ', '')) || (label === allLabel && selectedValue === 'All') || (label === selectedValue);
 
-                        btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${isSelected
-                            ? 'bg-gray-900 text-white border-gray-900 shadow-md transform scale-105'
-                            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                            }`;
-                    });
-                }
+                btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all border ${isSelected
+                    ? 'bg-gray-900 text-white border-gray-900 shadow-md transform scale-105'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`;
+            });
+        }
 
         function markLowestPrices(items) {
-                    // Group by Model + Storage
-                    const groups = {};
-                    items.forEach(item => {
-                        const key = `${item.model}-${item.storage}`;
-                        if (!groups[key]) groups[key] = [];
-                        groups[key].push(item);
-                    });
+            // Group by Model + Storage
+            const groups = {};
+            items.forEach(item => {
+                const key = `${item.model}-${item.storage}`;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(item);
+            });
 
-                    Object.values(groups).forEach(group => {
-                        if (group.length === 0) return;
-                        if (group.length === 0) return;
-                        const minPrice = Math.min(...group.map(i => priceMode === 'rent' ? i.price_effective_rent : i.price_gross));
-                        group.forEach(item => {
-                            const price = priceMode === 'rent' ? item.price_effective_rent : item.price_gross;
-                            item.isLowest = (price === minPrice);
-                        });
-                    });
-                }
+            Object.values(groups).forEach(group => {
+                if (group.length === 0) return;
+                if (group.length === 0) return;
+                const minPrice = Math.min(...group.map(i => priceMode === 'rent' ? i.price_effective_rent : i.price_gross));
+                group.forEach(item => {
+                    const price = priceMode === 'rent' ? item.price_effective_rent : item.price_gross;
+                    item.isLowest = (price === minPrice);
+                });
+            });
+        }
 
         function setPriceMode(mode) {
-                    priceMode = mode;
+            priceMode = mode;
 
-                    // Toggle Button Styles
-                    if (mode === 'rent') {
-                        modeRentBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all shadow-sm bg-white text-blue-600";
-                        modeBuyoutBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all text-gray-500 hover:text-gray-700";
-                        if (thPriceDisplay) thPriceDisplay.textContent = "実質負担額";
-                    } else {
-                        modeRentBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all text-gray-500 hover:text-gray-700";
-                        modeBuyoutBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all shadow-sm bg-white text-blue-600";
-                        if (thPriceDisplay) thPriceDisplay.textContent = "一括価格";
-                    }
+            // Toggle Button Styles
+            if (mode === 'rent') {
+                modeRentBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all shadow-sm bg-white text-blue-600";
+                modeBuyoutBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all text-gray-500 hover:text-gray-700";
+                if (thPriceDisplay) thPriceDisplay.textContent = "実質負担額";
+            } else {
+                modeRentBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all text-gray-500 hover:text-gray-700";
+                modeBuyoutBtn.className = "flex-1 py-2 text-xs md:text-sm font-bold rounded-lg transition-all shadow-sm bg-white text-blue-600";
+                if (thPriceDisplay) thPriceDisplay.textContent = "一括価格";
+            }
 
-                    markLowestPrices(allData);
-                    render();
-                }
+            markLowestPrices(allData);
+            render();
+        }
 
         function render() {
-                    // Filter
-                    let filtered = allData.filter(item => {
-                        if (!carriers.includes(item.carrier)) return false;
-                        if (selectedModel !== 'All' && item.model !== selectedModel) return false;
-                        if (selectedStorage !== 'All' && item.storage !== selectedStorage) return false;
-                        return true;
-                    });
+            // Filter
+            let filtered = allData.filter(item => {
+                if (!carriers.includes(item.carrier)) return false;
+                if (selectedModel !== 'All' && item.model !== selectedModel) return false;
+                if (selectedStorage !== 'All' && item.storage !== selectedStorage) return false;
+                return true;
+            });
 
-                    // Sort
-                    filtered.sort((a, b) => {
-                        if (sortOrder === 'model_newest') {
-                            // Extract model number for sorting (iPhone 16 > 15 ...) - SE last
-                            const getNum = (s) => {
-                                if (s.includes('SE')) return -1;
-                                const match = s.match(/iPhone\s*(\d+)/);
-                                return match ? parseInt(match[1]) : 0;
-                            };
-                            const numA = getNum(a.model);
-                            const numB = getNum(b.model);
-                            if (numA !== numB) return numB - numA; // Descending
-                            return a.model.localeCompare(b.model);
-                        } else {
-                            // Price Sort
-                            const valA = priceMode === 'rent' ? a.price_effective_rent : a.price_gross;
-                            const valB = priceMode === 'rent' ? b.price_effective_rent : b.price_gross;
-                            return sortOrder === 'price_asc' ? valA - valB : valB - valA;
-                        }
-                    });
+            // Sort
+            filtered.sort((a, b) => {
+                if (sortOrder === 'model_newest') {
+                    // Extract model number for sorting (iPhone 16 > 15 ...) - SE last
+                    const getNum = (s) => {
+                        if (s.includes('SE')) return -1;
+                        const match = s.match(/iPhone\s*(\d+)/);
+                        return match ? parseInt(match[1]) : 0;
+                    };
+                    const numA = getNum(a.model);
+                    const numB = getNum(b.model);
+                    if (numA !== numB) return numB - numA; // Descending
+                    return a.model.localeCompare(b.model);
+                } else {
+                    // Price Sort
+                    const valA = priceMode === 'rent' ? a.price_effective_rent : a.price_gross;
+                    const valB = priceMode === 'rent' ? b.price_effective_rent : b.price_gross;
+                    return sortOrder === 'price_asc' ? valA - valB : valB - valA;
+                }
+            });
 
-                    // Clear
-                    mobileListEl.innerHTML = '';
+            // Clear
+            mobileListEl.innerHTML = '';
 
-                    if (filtered.length === 0) {
-                        productContainerEl.classList.add('hidden');
-                        noResultsEl.classList.remove('hidden');
-                        return;
-                    } else {
-                        productContainerEl.classList.remove('hidden');
-                        noResultsEl.classList.add('hidden');
-                    }
+            if (filtered.length === 0) {
+                productContainerEl.classList.add('hidden');
+                noResultsEl.classList.remove('hidden');
+                return;
+            } else {
+                productContainerEl.classList.remove('hidden');
+                noResultsEl.classList.add('hidden');
+            }
 
-                    filtered.forEach(item => {
-                        const imgUrl = getProductImage(item.model);
-                        // const carrierClass = getCarrierColor(item.carrier); // Removed
-                        const carrierName = getCarrierDisplayName(item.carrier);
-                        const isLowest = item.isLowest;
+            filtered.forEach(item => {
+                const imgUrl = getProductImage(item.model);
+                // const carrierClass = getCarrierColor(item.carrier); // Removed
+                const carrierName = getCarrierDisplayName(item.carrier);
+                const isLowest = item.isLowest;
 
-                        // Values
-                        let displayPrice, displayLabel, unitBadge = '';
-                        if (priceMode === 'rent') {
-                            displayPrice = item.price_effective_rent;
-                            displayLabel = '実質負担';
-                            if (item.program_exemption > 0) unitBadge = '返却P';
-                        } else {
-                            displayPrice = item.price_gross;
-                            displayLabel = '一括価格';
-                            // if (item.points_awarded > 0) unitBadge = 'Pt還元含'; // Usually for effective buyout, but user asked for Gross. Keeping simple.
-                        }
+                // Values
+                let displayPrice, displayLabel, unitBadge = '';
+                if (priceMode === 'rent') {
+                    displayPrice = item.price_effective_rent;
+                    displayLabel = '実質負担';
+                    if (item.program_exemption > 0) unitBadge = '返却P';
+                } else {
+                    displayPrice = item.price_gross;
+                    displayLabel = '一括価格';
+                    // if (item.points_awarded > 0) unitBadge = 'Pt還元含'; // Usually for effective buyout, but user asked for Gross. Keeping simple.
+                }
 
-                        const fmtPrice = displayPrice.toLocaleString();
+                const fmtPrice = displayPrice.toLocaleString();
 
-                        // --- Mobile Card (Premium Design) ---
-                        const lowestBadge = isLowest ? `<div class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-[10px] font-black px-2 py-0.5 rounded shadow-sm z-10">最安</div>` : '';
+                // --- Mobile Card (Premium Design) ---
+                const lowestBadge = isLowest ? `<div class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-[10px] font-black px-2 py-0.5 rounded shadow-sm z-10">最安</div>` : '';
 
-                        const cardHTML = `
+                const cardHTML = `
                 <div class="flex flex-col gap-3 p-5 border border-gray-100 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200 transition-all duration-300 relative overflow-hidden group">
                     ${lowestBadge}
                     <div class="flex gap-4 items-start">
@@ -446,27 +448,27 @@
                     </a>
                 </div>
                 `;
-                        mobileListEl.insertAdjacentHTML('beforeend', cardHTML);
+                mobileListEl.insertAdjacentHTML('beforeend', cardHTML);
 
-                    });
-                }
+            });
+        }
 
         function getCarrierLogoPath(carrier) {
-                    if (carrier === 'Rakuten') return './images/logo_rakuten.png';
-                    if (carrier === 'ahamo') return './images/logo_ahamo.png';
-                    if (carrier === 'UQ mobile') return './images/logo_uq.png';
-                    return '';
-                }
+            if (carrier === 'Rakuten') return './images/logo_rakuten.png';
+            if (carrier === 'ahamo') return './images/logo_ahamo.png';
+            if (carrier === 'UQ mobile') return './images/logo_uq.png';
+            return '';
+        }
 
         function getCarrierDisplayName(carrier) {
-                    if (carrier === 'Rakuten') return '楽天モバイル';
-                    return carrier;
-                }
+            if (carrier === 'Rakuten') return '楽天モバイル';
+            return carrier;
+        }
 
         function getProductImage(model) {
-                    const text = model.replace(/\s+/g, '+');
-                    return `https://placehold.co/150x180/f3f4f6/333333?text=${text}`;
-                }
+            const text = model.replace(/\s+/g, '+');
+            return `https://placehold.co/150x180/f3f4f6/333333?text=${text}`;
+        }
 
     </script>
 </body>
