@@ -1,571 +1,571 @@
 {
-  "updated_at": "2025-12-12 02:26",
+  "updated_at": "2025-12-13 01:17",
   "items": [
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro Max",
       "storage": "256GB",
       "price_gross": 234800,
-      "discount_official": 0,
-      "program_exemption": 117400,
-      "points_awarded": 0,
-      "price_effective_rent": 117400,
+      "price_effective_rent": 117408,
       "price_effective_buyout": 234800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 117392,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockDelivery may",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫あり注文時期によってはお届けに2週間",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro Max",
       "storage": "512GB",
       "price_gross": 276800,
-      "discount_official": 0,
-      "program_exemption": 138400,
-      "points_awarded": 0,
-      "price_effective_rent": 138400,
+      "price_effective_rent": 138408,
       "price_effective_buyout": 276800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 138392,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockDelivery may",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫あり注文時期によってはお届けに2週間",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro Max",
       "storage": "1TB",
       "price_gross": 311800,
-      "discount_official": 0,
-      "program_exemption": 155900,
-      "points_awarded": 0,
-      "price_effective_rent": 155900,
+      "price_effective_rent": 155904,
       "price_effective_buyout": 311800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 155896,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockFastest deli",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫ありお届けまで最短3日※1",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro Max",
       "storage": "2TB",
       "price_gross": 381800,
-      "discount_official": 0,
-      "program_exemption": 190900,
-      "points_awarded": 0,
-      "price_effective_rent": 190900,
+      "price_effective_rent": 190896,
       "price_effective_buyout": 381800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 190904,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "Out of stockDelivery",
+          "color": "コズミックオレンジ",
+          "stock_text": "入荷待ちお届け時期未定",
           "stock_available": false
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro",
       "storage": "256GB",
       "price_gross": 207900,
-      "discount_official": 0,
-      "program_exemption": 103950,
-      "points_awarded": 0,
-      "price_effective_rent": 103950,
+      "price_effective_rent": 103944,
       "price_effective_buyout": 207900,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 103956,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockDelivery may",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫あり注文時期によってはお届けに2週間",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro",
       "storage": "512GB",
       "price_gross": 259800,
-      "discount_official": 0,
-      "program_exemption": 129900,
-      "points_awarded": 0,
-      "price_effective_rent": 129900,
+      "price_effective_rent": 129912,
       "price_effective_buyout": 259800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 129888,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockFastest deli",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫ありお届けまで最短3日※1",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17 Pro",
       "storage": "1TB",
       "price_gross": 300800,
-      "discount_official": 0,
-      "program_exemption": 150400,
-      "points_awarded": 0,
-      "price_effective_rent": 150400,
+      "price_effective_rent": 150408,
       "price_effective_buyout": 300800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 150392,
       "variants": [
         {
-          "color": "Cosmic",
-          "stock_text": "In stockFastest deli",
+          "color": "コズミックオレンジ",
+          "stock_text": "在庫ありお届けまで最短3日※1",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone Air",
       "storage": "256GB",
       "price_gross": 185900,
-      "discount_official": 0,
-      "program_exemption": 92950,
-      "points_awarded": 0,
-      "price_effective_rent": 92950,
+      "price_effective_rent": 92952,
       "price_effective_buyout": 185900,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 92948,
       "variants": [
         {
-          "color": "Sky Blue",
-          "stock_text": "In stockDelivery may",
+          "color": "スカイブルー",
+          "stock_text": "在庫あり注文時期によってはお届けに2週間",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone Air",
       "storage": "512GB",
       "price_gross": 231800,
-      "discount_official": 0,
-      "program_exemption": 115900,
-      "points_awarded": 0,
-      "price_effective_rent": 115900,
+      "price_effective_rent": 115896,
       "price_effective_buyout": 231800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 115904,
       "variants": [
         {
-          "color": "Sky Blue",
-          "stock_text": "In stockFastest deli",
+          "color": "スカイブルー",
+          "stock_text": "在庫ありお届けまで最短3日※1",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone Air",
       "storage": "1TB",
       "price_gross": 277800,
-      "discount_official": 0,
-      "program_exemption": 138900,
-      "points_awarded": 0,
-      "price_effective_rent": 138900,
+      "price_effective_rent": 138912,
       "price_effective_buyout": 277800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 138888,
       "variants": [
         {
-          "color": "Sky Blue",
-          "stock_text": "In stockFastest deli",
+          "color": "スカイブルー",
+          "stock_text": "在庫ありお届けまで最短3日※1",
           "stock_available": true
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17",
       "storage": "256GB",
       "price_gross": 146800,
-      "discount_official": 0,
-      "program_exemption": 73400,
-      "points_awarded": 0,
-      "price_effective_rent": 73400,
+      "price_effective_rent": 73392,
       "price_effective_buyout": 146800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 73408,
       "variants": [
         {
-          "color": "black",
-          "stock_text": "Out of stockDelivery",
+          "color": "ブラック",
+          "stock_text": "入荷待ちお届け時期未定",
           "stock_available": false
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 17",
       "storage": "512GB",
       "price_gross": 195800,
-      "discount_official": 0,
-      "program_exemption": 97900,
-      "points_awarded": 0,
-      "price_effective_rent": 97900,
+      "price_effective_rent": 97896,
       "price_effective_buyout": 195800,
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 97904,
       "variants": [
         {
-          "color": "black",
-          "stock_text": "Out of stockDelivery",
+          "color": "ブラック",
+          "stock_text": "入荷待ちお届け時期未定",
           "stock_available": false
         }
-      ],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      ]
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16e",
       "storage": "128GB",
       "price_gross": 104800,
-      "discount_official": 0,
-      "program_exemption": 52400,
-      "points_awarded": 52352,
       "price_effective_rent": 48,
       "price_effective_buyout": 52448,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 52352,
+      "program_exemption": 52400,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16e",
       "storage": "256GB",
       "price_gross": 120500,
-      "discount_official": 0,
-      "program_exemption": 60250,
-      "points_awarded": 52352,
       "price_effective_rent": 7898,
       "price_effective_buyout": 68148,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 52352,
+      "program_exemption": 60250,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16e",
       "storage": "512GB",
       "price_gross": 153800,
-      "discount_official": 0,
-      "program_exemption": 76900,
-      "points_awarded": 52352,
       "price_effective_rent": 24548,
       "price_effective_buyout": 101448,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 52352,
+      "program_exemption": 76900,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro Max",
       "storage": "256GB",
       "price_gross": 224800,
-      "discount_official": 0,
-      "program_exemption": 112400,
-      "points_awarded": 0,
-      "price_effective_rent": 112400,
+      "price_effective_rent": 112392,
       "price_effective_buyout": 224800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 112408,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro Max",
       "storage": "512GB",
       "price_gross": 260800,
-      "discount_official": 0,
-      "program_exemption": 130400,
-      "points_awarded": 0,
-      "price_effective_rent": 130400,
+      "price_effective_rent": 130392,
       "price_effective_buyout": 260800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 130408,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro Max",
       "storage": "1TB",
       "price_gross": 286800,
-      "discount_official": 0,
-      "program_exemption": 143400,
-      "points_awarded": 0,
       "price_effective_rent": 143400,
       "price_effective_buyout": 286800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 143400,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro",
       "storage": "128GB",
       "price_gross": 181800,
-      "discount_official": 0,
-      "program_exemption": 90900,
-      "points_awarded": 0,
-      "price_effective_rent": 90900,
+      "price_effective_rent": 90912,
       "price_effective_buyout": 181800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 90888,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro",
       "storage": "256GB",
       "price_gross": 205900,
-      "discount_official": 0,
-      "program_exemption": 102950,
-      "points_awarded": 0,
-      "price_effective_rent": 102950,
+      "price_effective_rent": 102960,
       "price_effective_buyout": 205900,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 102940,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro",
       "storage": "512GB",
       "price_gross": 242800,
-      "discount_official": 0,
-      "program_exemption": 121400,
-      "points_awarded": 0,
-      "price_effective_rent": 121400,
+      "price_effective_rent": 121392,
       "price_effective_buyout": 242800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 121408,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Pro",
       "storage": "1TB",
       "price_gross": 278800,
-      "discount_official": 0,
-      "program_exemption": 139400,
-      "points_awarded": 0,
-      "price_effective_rent": 139400,
+      "price_effective_rent": 139392,
       "price_effective_buyout": 278800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 139408,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Plus",
       "storage": "128GB",
       "price_gross": 158800,
-      "discount_official": 0,
-      "program_exemption": 79400,
-      "points_awarded": 0,
-      "price_effective_rent": 79400,
+      "price_effective_rent": 79392,
       "price_effective_buyout": 158800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 79408,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Plus",
       "storage": "256GB",
       "price_gross": 180800,
-      "discount_official": 0,
-      "program_exemption": 90400,
-      "points_awarded": 0,
-      "price_effective_rent": 90400,
+      "price_effective_rent": 90408,
       "price_effective_buyout": 180800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 90392,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 16 Plus",
       "storage": "512GB",
       "price_gross": 218900,
-      "discount_official": 0,
-      "program_exemption": 109450,
-      "points_awarded": 0,
-      "price_effective_rent": 109450,
+      "price_effective_rent": 109440,
       "price_effective_buyout": 218900,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 109460,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro Max",
       "storage": "256GB",
       "price_gross": 193400,
-      "discount_official": 0,
-      "program_exemption": 96700,
-      "points_awarded": 0,
-      "price_effective_rent": 96700,
+      "price_effective_rent": 96696,
       "price_effective_buyout": 193400,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 96704,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro Max",
       "storage": "512GB",
       "price_gross": 223700,
-      "discount_official": 0,
-      "program_exemption": 111850,
-      "points_awarded": 0,
-      "price_effective_rent": 111850,
+      "price_effective_rent": 111840,
       "price_effective_buyout": 223700,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 111860,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro Max",
       "storage": "1TB",
       "price_gross": 250100,
-      "discount_official": 0,
-      "program_exemption": 125050,
-      "points_awarded": 0,
-      "price_effective_rent": 125050,
+      "price_effective_rent": 125040,
       "price_effective_buyout": 250100,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 125060,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro",
       "storage": "128GB",
       "price_gross": 163400,
-      "discount_official": 0,
-      "program_exemption": 81700,
-      "points_awarded": 0,
-      "price_effective_rent": 81700,
+      "price_effective_rent": 81696,
       "price_effective_buyout": 163400,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 81704,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro",
       "storage": "256GB",
       "price_gross": 178000,
-      "discount_official": 0,
-      "program_exemption": 89000,
-      "points_awarded": 0,
-      "price_effective_rent": 89000,
+      "price_effective_rent": 88992,
       "price_effective_buyout": 178000,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 89008,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro",
       "storage": "512GB",
       "price_gross": 209300,
-      "discount_official": 0,
-      "program_exemption": 104650,
-      "points_awarded": 0,
-      "price_effective_rent": 104650,
+      "price_effective_rent": 104640,
       "price_effective_buyout": 209300,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 104660,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15 Pro",
       "storage": "1TB",
       "price_gross": 241700,
-      "discount_official": 0,
-      "program_exemption": 120850,
-      "points_awarded": 0,
-      "price_effective_rent": 120850,
+      "price_effective_rent": 120840,
       "price_effective_buyout": 241700,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 120860,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15",
       "storage": "128GB",
       "price_gross": 112800,
-      "discount_official": 0,
-      "program_exemption": 56400,
-      "points_awarded": 0,
       "price_effective_rent": 56400,
       "price_effective_buyout": 112800,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 56400,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15",
       "storage": "256GB",
       "price_gross": 129600,
-      "discount_official": 0,
-      "program_exemption": 64800,
-      "points_awarded": 0,
       "price_effective_rent": 64800,
       "price_effective_buyout": 129600,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 64800,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
       "model": "iPhone 15",
       "storage": "512GB",
       "price_gross": 158600,
-      "discount_official": 0,
-      "program_exemption": 79300,
-      "points_awarded": 0,
-      "price_effective_rent": 79300,
+      "price_effective_rent": 79296,
       "price_effective_buyout": 158600,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 79304,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
-      "model": "iPhone SE (3rd generation)",
+      "model": "iPhone SE（第3世代）",
       "storage": "64GB",
       "price_gross": 64000,
-      "discount_official": 0,
-      "program_exemption": 32000,
-      "points_awarded": 0,
-      "price_effective_rent": 32000,
+      "price_effective_rent": 31992,
       "price_effective_buyout": 64000,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 32008,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
-      "model": "iPhone SE (3rd generation)",
+      "model": "iPhone SE（第3世代）",
       "storage": "128GB",
       "price_gross": 70900,
-      "discount_official": 0,
-      "program_exemption": 35450,
-      "points_awarded": 0,
-      "price_effective_rent": 35450,
+      "price_effective_rent": 35448,
       "price_effective_buyout": 70900,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 35452,
+      "variants": []
     },
     {
       "carrier": "Rakuten",
-      "model": "iPhone SE (3rd generation)",
+      "model": "iPhone SE（第3世代）",
       "storage": "256GB",
       "price_gross": 85900,
-      "discount_official": 0,
-      "program_exemption": 42950,
-      "points_awarded": 0,
-      "price_effective_rent": 42950,
+      "price_effective_rent": 42960,
       "price_effective_buyout": 85900,
-      "variants": [],
-      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/"
+      "url": "https://network.mobile.rakuten.co.jp/product/iphone/fee/",
+      "discount_official": 0,
+      "points_awarded": 0,
+      "program_exemption": 42940,
+      "variants": []
     },
     {
       "carrier": "ahamo",
