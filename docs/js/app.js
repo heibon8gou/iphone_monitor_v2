@@ -21,7 +21,7 @@ window.mountIPhoneMonitor = function (container, config) {
     const LOAD_INCREMENT = 5;
 
     let allData = [];
-    let carriers = ['Rakuten', 'ahamo', 'UQ mobile'];
+    let carriers = ['Rakuten', 'ahamo', 'UQ mobile', 'au', 'SoftBank', 'docomo'];
     let selectedModel = 'All';
     let selectedStorage = 'All';
     let priceMode = 'rent'; // 'rent' or 'buyout'
@@ -56,13 +56,13 @@ window.mountIPhoneMonitor = function (container, config) {
 
         container.innerHTML = `
             <!-- Header / Toggle -->
-            <div class="mb-10 text-center space-y-6">
+            <div class="mb-4 md:mb-8 text-center space-y-6">
                 <!-- Price Mode Toggle -->
                 <div class="inline-block">
                     <div class="bg-[#e5e7eb] p-1 rounded-full inline-flex relative w-[340px] h-[40px] items-center">
                         <div id="toggle-bg" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
                         <button id="mode-rent" class="relative z-10 w-1/2 h-full text-sm font-bold rounded-full transition-colors duration-300 flex items-center justify-center text-black">
-                            実質負担 (2年返却)
+                            2年間実質負担
                         </button>
                         <button id="mode-buyout" class="relative z-10 w-1/2 h-full text-sm font-bold rounded-full transition-colors duration-300 flex items-center justify-center text-gray-500 hover:text-gray-900">
                             一括購入
@@ -72,27 +72,46 @@ window.mountIPhoneMonitor = function (container, config) {
             </div>
 
             <!-- Filters Section -->
-            <div class="mb-8 space-y-6 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <div class="mb-4 md:mb-8 space-y-6 bg-white p-4 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <!-- Carriers -->
                 <div class="space-y-2">
                     <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">キャリア</h3>
-                    <div class="flex flex-wrap gap-3" id="carrier-filters">
-                        <label class="cursor-pointer select-none group">
+                    <!-- Mobile: Single line (flex-nowrap), Desktop: Wrap -->
+                    <div class="flex gap-1.5 md:gap-3 md:flex-wrap" id="carrier-filters">
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
                             <input type="checkbox" class="filter-carrier peer hidden" value="Rakuten" checked>
-                            <div class="h-12 w-28 rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-pink-500 peer-checked:bg-white peer-checked:shadow-md">
-                                <img src="${imgRakuten}" alt="楽天モバイル" class="h-6 w-auto object-contain">
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-pink-500 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${imgRakuten}" alt="楽天モバイル" class="h-4 md:h-6 w-auto object-contain">
                             </div>
                         </label>
-                        <label class="cursor-pointer select-none group">
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
                             <input type="checkbox" class="filter-carrier peer hidden" value="ahamo" checked>
-                            <div class="h-12 w-28 rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-green-500 peer-checked:bg-white peer-checked:shadow-md">
-                                <img src="${imgAhamo}" alt="ahamo" class="h-6 w-auto object-contain">
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-green-500 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${imgAhamo}" alt="ahamo" class="h-4 md:h-6 w-auto object-contain">
                             </div>
                         </label>
-                        <label class="cursor-pointer select-none group">
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
                             <input type="checkbox" class="filter-carrier peer hidden" value="UQ mobile" checked>
-                            <div class="h-12 w-28 rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-blue-500 peer-checked:bg-white peer-checked:shadow-md">
-                                <img src="${imgUQ}" alt="UQ mobile" class="h-6 w-auto object-contain">
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-blue-500 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${imgUQ}" alt="UQ mobile" class="h-4 md:h-6 w-auto object-contain">
+                            </div>
+                        </label>
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
+                            <input type="checkbox" class="filter-carrier peer hidden" value="au" checked>
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-orange-500 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${BASE_URL}images/logo_au.svg" alt="au" class="h-4 md:h-6 w-auto object-contain">
+                            </div>
+                        </label>
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
+                            <input type="checkbox" class="filter-carrier peer hidden" value="SoftBank" checked>
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-gray-400 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${BASE_URL}images/logo_softbank.svg" alt="SoftBank" class="h-4 md:h-6 w-auto object-contain">
+                            </div>
+                        </label>
+                        <label class="cursor-pointer select-none group flex-1 min-w-0">
+                            <input type="checkbox" class="filter-carrier peer hidden" value="docomo" checked>
+                            <div class="h-10 md:h-12 w-full rounded-xl border-2 border-slate-900 bg-gray-50 flex items-center justify-center transition-all opacity-50 grayscale hover:opacity-75 peer-checked:opacity-100 peer-checked:grayscale-0 peer-checked:border-red-600 peer-checked:bg-white peer-checked:shadow-md px-1">
+                                <img src="${BASE_URL}images/logo_docomo.svg" alt="docomo" class="h-4 md:h-6 w-auto object-contain">
                             </div>
                         </label>
                     </div>
@@ -101,13 +120,13 @@ window.mountIPhoneMonitor = function (container, config) {
                 <!-- Models -->
                 <div class="space-y-2">
                     <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">機種</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-4 px-1 no-scrollbar md:flex-wrap" id="filter-model-container"></div>
+                    <div class="flex gap-3 overflow-x-auto p-1 no-scrollbar md:flex-wrap" id="filter-model-container"></div>
                 </div>
 
                 <!-- Storage -->
                 <div class="space-y-2">
                     <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">ストレージ容量</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-4 px-1 no-scrollbar md:flex-wrap" id="filter-storage-container"></div>
+                    <div class="flex gap-3 overflow-x-auto p-1 no-scrollbar md:flex-wrap" id="filter-storage-container"></div>
                 </div>
 
                 <!-- Sort -->
@@ -289,7 +308,7 @@ window.mountIPhoneMonitor = function (container, config) {
         storages.unshift('All');
 
         storageContainer.innerHTML = '';
-        storages.forEach(s => {
+        storages.filter(s => s !== 'Unknown' && s !== '最小容量').forEach(s => {
             const btn = document.createElement('button');
             btn.textContent = (s === 'All') ? '全て' : s;
             btn.className = getChipClass(s === selectedStorage);
@@ -370,7 +389,16 @@ window.mountIPhoneMonitor = function (container, config) {
         let filtered = allData.filter(item => {
             if (!carriers.includes(item.carrier)) return false;
             if (selectedModel !== 'All' && item.model !== selectedModel) return false;
-            if (selectedStorage !== 'All' && item.storage !== selectedStorage) return false;
+            if (selectedModel !== 'All' && item.model !== selectedModel) return false;
+            if (selectedStorage !== 'All') {
+                if (item.storage === '最小容量') {
+                    // Heuristic: If storage filter is 128GB (standard) or 64GB (SE), show "最小容量" too
+                    if (selectedStorage !== '128GB' && selectedStorage !== '64GB' && selectedStorage !== '256GB') return false; 
+                    // Basically allow "最小容量" to show up or be generous
+                } else if (item.storage !== selectedStorage) {
+                    return false;
+                }
+            }
             return true;
         });
 
@@ -437,7 +465,7 @@ window.mountIPhoneMonitor = function (container, config) {
             let displayPrice, displayLabel, unitBadge = '';
             if (priceMode === 'rent') {
                 displayPrice = item.price_effective_rent;
-                displayLabel = '実質負担';
+                displayLabel = '2年間実質負担';
                 if (item.program_exemption > 0) unitBadge = '返却P';
             } else {
                 displayPrice = item.price_gross;
@@ -487,11 +515,15 @@ window.mountIPhoneMonitor = function (container, config) {
         if (carrier === 'Rakuten') return BASE_URL + 'images/logo_rakuten.png';
         if (carrier === 'ahamo') return BASE_URL + 'images/logo_ahamo.png';
         if (carrier === 'UQ mobile') return BASE_URL + 'images/logo_uq.png';
+        if (carrier === 'au') return BASE_URL + 'images/logo_au.svg';
+        if (carrier === 'SoftBank') return BASE_URL + 'images/logo_softbank.svg';
+        if (carrier === 'docomo') return BASE_URL + 'images/logo_docomo.svg';
         return '';
     }
 
     function getCarrierDisplayName(carrier) {
         if (carrier === 'Rakuten') return '楽天モバイル';
+        if (carrier === 'docomo') return 'ドコモ';
         return carrier;
     }
 
