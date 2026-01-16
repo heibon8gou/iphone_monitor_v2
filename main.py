@@ -483,6 +483,10 @@ async def scrape_ahamo(page):
                 storage = "Unknown"
 
             if price_gross > 0:
+                 # ahamo listing page typically doesn't show detailed payment phases
+                 # Phases would require visiting individual product pages
+                 monthly_payment_phases = []
+                 
                  items.append({
                     "carrier": "ahamo",
                     "model": model_name,
@@ -494,7 +498,7 @@ async def scrape_ahamo(page):
                     "price_effective_rent": price_effective_rent,      
                     "price_effective_buyout": price_effective_buyout,  
                     "monthly_payment": price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48,
-                    "monthly_payment_phases": [],
+                    "monthly_payment_phases": monthly_payment_phases,
                     "variants": [],
                     "url": url
                 })
@@ -701,10 +705,30 @@ async def scrape_au(page):
                             price_effective_rent = int(p_text.replace(',', ''))
                             break
                             
-                # 3. Points (Optional, usually 0 for carrier base unless campaign)
+                # 3. Monthly Payment Phases (au: 初回/2回目以降)
+                monthly_payment_phases = []
+                first_payment = 0
+                subsequent_payment = 0
+                
+                # Pattern: 「賦払金初回X円」＋「賦払金2回目以降：X円ｘ22回」
+                first_match = re.search(r'賦払金初回[：:\s]*([0-9,]+)円', content)
+                subsequent_match = re.search(r'2回目以降[：:\s]*([0-9,]+)円', content)
+                
+                if first_match:
+                    first_payment = int(first_match.group(1).replace(',', ''))
+                if subsequent_match:
+                    subsequent_payment = int(subsequent_match.group(1).replace(',', ''))
+                
+                if first_payment > 0 and subsequent_payment > 0 and first_payment != subsequent_payment:
+                    monthly_payment_phases = [
+                        {"period": "初回", "amount": first_payment},
+                        {"period": "2〜23回", "amount": subsequent_payment}
+                    ]
+                            
+                # 4. Points (Optional, usually 0 for carrier base unless campaign)
                 points_awarded = 0
                 
-                # 4. Storage
+                # 5. Storage
                 # Use default base storage based on model name
                 storage = get_default_storage(model_name)
                 
@@ -728,6 +752,9 @@ async def scrape_au(page):
                      # If no program price found, effective rent is gross
                      price_effective_rent = price_gross
 
+                # Calculate monthly_payment (use subsequent for display, or first if no phases)
+                monthly_payment = subsequent_payment if subsequent_payment > 0 else (first_payment if first_payment > 0 else (price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48))
+
                 if price_gross > 0:
                      items.append({
                         "carrier": "au",
@@ -739,8 +766,8 @@ async def scrape_au(page):
                         "points_awarded": points_awarded,
                         "price_effective_rent": price_effective_rent,
                         "price_effective_buyout": price_effective_buyout,
-                        "monthly_payment": price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48,
-                        "monthly_payment_phases": [],
+                        "monthly_payment": monthly_payment,
+                        "monthly_payment_phases": monthly_payment_phases,
                         "variants": [],
                         "url": model_url
                     })
@@ -1029,8 +1056,36 @@ async def scrape_docomo(page):
                 except Exception as e:
                     print(f"  Price extract error for {model_name}: {e}")
 
+                # 3. Monthly Payment Phases (docomo: いつでもカエドキプログラム)
+                monthly_payment_phases = []
+                first_payment = 0
+                subsequent_payment = 0
+                
+                # Pattern: 「賦払金（初回）X円」＋「賦払金（2回目以降）X円」
+                first_match = re.search(r'(?:初回|1回目)[：:\s）)]*([0-9,]+)円', content)
+                subsequent_match = re.search(r'2回目以降[：:\s）)]*([0-9,]+)円', content)
+                
+                if first_match:
+                    first_payment = int(first_match.group(1).replace(',', ''))
+                    # Filter out obviously wrong values (total price instead of monthly)
+                    if first_payment > 50000:
+                        first_payment = 0
+                if subsequent_match:
+                    subsequent_payment = int(subsequent_match.group(1).replace(',', ''))
+                    if subsequent_payment > 50000:
+                        subsequent_payment = 0
+                
+                if first_payment > 0 and subsequent_payment > 0 and first_payment != subsequent_payment:
+                    monthly_payment_phases = [
+                        {"period": "初回", "amount": first_payment},
+                        {"period": "2〜23回", "amount": subsequent_payment}
+                    ]
+                
+                # Calculate effective first, then monthly_payment
+                effective = price_effective_rent if price_effective_rent else price_gross
+                monthly_payment = subsequent_payment if subsequent_payment > 0 else (first_payment if first_payment > 0 else (effective // 23 if effective > 0 else price_gross // 48))
+
                 if price_gross > 0:
-                     effective = price_effective_rent if price_effective_rent else price_gross
                      items.append({
                         "carrier": "docomo",
                         "model": model_name,
@@ -1041,8 +1096,8 @@ async def scrape_docomo(page):
                         "points_awarded": 0,
                         "price_effective_rent": effective,
                         "price_effective_buyout": price_gross,
-                        "monthly_payment": effective // 23 if effective > 0 else price_gross // 48,
-                        "monthly_payment_phases": [],
+                        "monthly_payment": monthly_payment,
+                        "monthly_payment_phases": monthly_payment_phases,
                         "variants": [],
                         "url": p_url
                     })

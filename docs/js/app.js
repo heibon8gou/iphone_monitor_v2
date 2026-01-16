@@ -455,8 +455,8 @@ window.mountIPhoneMonitor = function (container, config) {
             const displayPrice = monthlyPayment;
             if (item.program_exemption > 0) unitBadge = '返却P';
             
-            // SoftBank payment phases display
-            if (item.carrier === 'SoftBank' && item.monthly_payment_phases && item.monthly_payment_phases.length > 1) {
+            // Monthly payment phases display (all carriers)
+            if (item.monthly_payment_phases && item.monthly_payment_phases.length > 1) {
                 const phases = item.monthly_payment_phases
                     .filter(p => p.amount > 0)
                     .map(p => `<span class="inline-block">${p.period}: ¥${p.amount.toLocaleString()}</span>`)
