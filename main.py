@@ -493,7 +493,7 @@ async def scrape_ahamo(page):
                     "points_awarded": points_awarded,
                     "price_effective_rent": price_effective_rent,      
                     "price_effective_buyout": price_effective_buyout,  
-                    "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 48,
+                    "monthly_payment": price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48,
                     "monthly_payment_phases": [],
                     "variants": [],
                     "url": url
@@ -1041,7 +1041,7 @@ async def scrape_docomo(page):
                         "points_awarded": 0,
                         "price_effective_rent": effective,
                         "price_effective_buyout": price_gross,
-                        "monthly_payment": effective // 24 if effective > 0 else price_gross // 48,
+                        "monthly_payment": effective // 23 if effective > 0 else price_gross // 48,
                         "monthly_payment_phases": [],
                         "variants": [],
                         "url": p_url
