@@ -55,21 +55,6 @@ window.mountIPhoneMonitor = function (container, config) {
         const imgUQ = BASE_URL + 'images/logo_uq.png';
 
         container.innerHTML = `
-            <!-- Header / Toggle -->
-            <div class="mb-4 md:mb-8 text-center space-y-6">
-                <!-- Price Mode Toggle -->
-                <div class="inline-block">
-                    <div class="bg-[#e5e7eb] p-1 rounded-full inline-flex relative w-[340px] h-[40px] items-center">
-                        <div id="toggle-bg" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"></div>
-                        <button id="mode-rent" class="relative z-10 w-1/2 h-full text-sm font-bold rounded-full transition-colors duration-300 flex items-center justify-center text-black">
-                            2年間実質負担
-                        </button>
-                        <button id="mode-buyout" class="relative z-10 w-1/2 h-full text-sm font-bold rounded-full transition-colors duration-300 flex items-center justify-center text-gray-500 hover:text-gray-900">
-                            一括購入
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Filters Section -->
             <div class="mb-4 md:mb-8 space-y-6 bg-white p-4 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
@@ -351,9 +336,10 @@ window.mountIPhoneMonitor = function (container, config) {
 
         Object.values(groups).forEach(group => {
             if (group.length === 0) return;
-            const minPrice = Math.min(...group.map(i => priceMode === 'rent' ? i.price_effective_rent : i.price_gross));
+            const getMonthlyPrice = (i) => i.monthly_payment || (i.price_effective_rent ? Math.floor(i.price_effective_rent / 24) : 0);
+            const minPrice = Math.min(...group.map(i => priceMode === 'rent' ? getMonthlyPrice(i) : i.price_gross));
             group.forEach(item => {
-                const price = priceMode === 'rent' ? item.price_effective_rent : item.price_gross;
+                const price = priceMode === 'rent' ? getMonthlyPrice(item) : item.price_gross;
                 item.isLowest = (price === minPrice);
             });
         });
@@ -414,8 +400,9 @@ window.mountIPhoneMonitor = function (container, config) {
                 if (numA !== numB) return numB - numA;
                 return a.model.localeCompare(b.model);
             } else {
-                const valA = priceMode === 'rent' ? a.price_effective_rent : a.price_gross;
-                const valB = priceMode === 'rent' ? b.price_effective_rent : b.price_gross;
+                const getMonthlyPrice = (i) => i.monthly_payment || (i.price_effective_rent ? Math.floor(i.price_effective_rent / 24) : 0);
+                const valA = priceMode === 'rent' ? getMonthlyPrice(a) : a.price_gross;
+                const valB = priceMode === 'rent' ? getMonthlyPrice(b) : b.price_gross;
                 return sortOrder === 'price_asc' ? valA - valB : valB - valA;
             }
         });
@@ -462,14 +449,21 @@ window.mountIPhoneMonitor = function (container, config) {
             const carrierLogo = getCarrierLogoPath(item.carrier);
             const isLowest = item.isLowest;
 
-            let displayPrice, displayLabel, unitBadge = '';
-            if (priceMode === 'rent') {
-                displayPrice = item.price_effective_rent;
-                displayLabel = '2年間実質負担';
-                if (item.program_exemption > 0) unitBadge = '返却P';
-            } else {
-                displayPrice = item.price_gross;
-                displayLabel = '一括価格';
+            let unitBadge = '', phasesHTML = '';
+            // Monthly payment only
+            const monthlyPayment = item.monthly_payment || (item.price_effective_rent ? Math.floor(item.price_effective_rent / 24) : 0);
+            const displayPrice = monthlyPayment;
+            if (item.program_exemption > 0) unitBadge = '返却P';
+            
+            // SoftBank payment phases display
+            if (item.carrier === 'SoftBank' && item.monthly_payment_phases && item.monthly_payment_phases.length > 1) {
+                const phases = item.monthly_payment_phases
+                    .filter(p => p.amount > 0)
+                    .map(p => `<span class="inline-block">${p.period}: ¥${p.amount.toLocaleString()}</span>`)
+                    .join('<span class="mx-1 text-gray-300">→</span>');
+                if (phases) {
+                    phasesHTML = `<div class="mt-1 text-[10px] text-gray-500 leading-relaxed">${phases}</div>`;
+                }
             }
 
             const fmtPrice = displayPrice.toLocaleString();
@@ -494,9 +488,10 @@ window.mountIPhoneMonitor = function (container, config) {
                             </div>
                             <div class="mt-3">
                                 <div class="flex items-baseline gap-1">
-                                    <span class="text-xs text-gray-400 font-bold">${displayLabel}</span>
-                                    <span class="text-3xl font-black text-slate-800 tracking-tighter font-sans">¥${fmtPrice}</span>
+                                    <span class="text-xs text-gray-400 font-bold">月々</span>
+                                    <span class="text-3xl font-black text-slate-800 tracking-tighter font-sans">¥${fmtPrice}〜</span>
                                 </div>
+                                ${phasesHTML}
                                 ${unitBadge ? `<div class="mt-1"><span class="text-[10px] text-red-600 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded font-bold">${unitBadge}</span></div>` : ''}
                             </div>
                         </div>

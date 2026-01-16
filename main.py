@@ -246,6 +246,8 @@ async def scrape_rakuten(page):
                     "discount_official": 0,
                     "points_awarded": points_awarded,
                     "program_exemption": program_exemption,
+                    "monthly_payment": p_effective_rent // 24 if p_effective_rent > 0 else p_gross // 48,
+                    "monthly_payment_phases": [],
                     "variants": item_variants
                 })
                 added_count += 1
@@ -257,6 +259,56 @@ async def scrape_rakuten(page):
         print(f"Error scraping Rakuten: {e}")
         import traceback
         traceback.print_exc()
+
+    # --- 4. Scrape Monthly Prices from Individual Product Pages ---
+    print("Rakuten: Fetching monthly prices from individual product pages...")
+    product_urls = {
+        "iPhone 16e": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16e/",
+        "iPhone 16": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16/",
+        "iPhone 16 Plus": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16-plus/",
+        "iPhone 16 Pro": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16-pro/",
+        "iPhone 16 Pro Max": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16-pro-max/",
+        "iPhone 17": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-17/",
+        "iPhone 17 Pro": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-17-pro/",
+        "iPhone 17 Pro Max": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-17-pro-max/",
+        "iPhone Air": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-air/",
+    }
+    
+    monthly_price_map = {}  # model -> monthly_price
+    for model_name, product_url in product_urls.items():
+        try:
+            await page.goto(product_url, wait_until="networkidle")
+            await page.wait_for_timeout(3000)
+            
+            page_text = await page.inner_text("body")
+            
+            # Pattern: X円/月 or X,XXX円/月 (monthly price display, including commas)
+            monthly_matches = re.findall(r'([\d,]+)円/月', page_text)
+            if monthly_matches:
+                # Parse prices, removing commas
+                prices = [int(p.replace(',', '')) for p in monthly_matches]
+                # Filter: Device monthly payments are typically >= 1 yen for promos, but plan prices like 1,078円 should be ignored
+                # Real device promotional prices are usually shown as 1円, 78円 etc (very low), or actual device payments (3000+ yen)
+                # To distinguish: if we find a price <= 100 yen, it's likely a device promo price
+                # Otherwise, filter out prices that look like plan prices (1000-2000 range)
+                device_prices = [p for p in prices if p <= 100 or p >= 2000]
+                if device_prices:
+                    min_price = min(device_prices)
+                    monthly_price_map[model_name] = min_price
+                    print(f"  {model_name}: {min_price}円/月 (from page)")
+        except Exception as e:
+            print(f"  Error fetching {model_name}: {e}")
+    
+    # Update items with scraped monthly prices
+    for item in items:
+        model = item["model"]
+        if model in monthly_price_map:
+            old_price = item["monthly_payment"]
+            new_price = monthly_price_map[model]
+            if new_price < old_price:
+                item["monthly_payment"] = new_price
+                # Also update price_effective_rent to match
+                item["price_effective_rent"] = new_price * 24
 
     print(f"Rakuten: Found {len(items)} items")
     return items
@@ -365,6 +417,8 @@ async def scrape_ahamo(page):
                     "points_awarded": points_awarded,
                     "price_effective_rent": price_effective_rent,      
                     "price_effective_buyout": price_effective_buyout,  
+                    "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 48,
+                    "monthly_payment_phases": [],
                     "variants": [],
                     "url": url
                 })
@@ -454,6 +508,8 @@ async def scrape_uq(page):
                             "points_awarded": points_awarded,
                             "price_effective_rent": price_effective_rent,
                             "price_effective_buyout": price_effective_buyout,
+                            "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 24,
+                            "monthly_payment_phases": [],
                             "variants": [],
                             "url": model_url
                         })
@@ -481,6 +537,8 @@ async def scrape_uq(page):
                                 "points_awarded": points_awarded,
                                 "price_effective_rent": price_effective_rent,
                                 "price_effective_buyout": price_effective_buyout,
+                                "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 24,
+                                "monthly_payment_phases": [],
                                 "variants": [],
                                 "url": model_url
                             })
@@ -606,6 +664,8 @@ async def scrape_au(page):
                         "points_awarded": points_awarded,
                         "price_effective_rent": price_effective_rent,
                         "price_effective_buyout": price_effective_buyout,
+                        "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 48,
+                        "monthly_payment_phases": [],
                         "variants": [],
                         "url": model_url
                     })
@@ -663,58 +723,116 @@ async def scrape_softbank(page):
                     model_name = model_name.replace("【予約・購入】", "").strip()
                     model_name = model_name.replace("予約", "").strip()
                 
-                # Prices are often images or complex layout.
-                # Key text: "総額" (Gross) "実質負担金" (Effective)
-                
                 content = await page.content()
                 
                 # 1. Gross Price
                 price_gross = 0
-                # Try finding "総額" in the price summary area
-                # Looking for <span ...>総額</span>...<em ...>145,440</em>
-                # We can use a regex on the whole content for safety, or targeted locator
                 g_regex = re.search(r'総額.*?([\d,]+)円', content)
                 if g_regex:
                     price_gross = int(g_regex.group(1).replace(',', ''))
                 
-                # 2. Effective Rent
+                # 2. Effective Rent (2-year total)
                 price_effective_rent = 0
                 
-                # Look for "Tokusuru Support" section
-                # mobile-page-u96-app-model-price-applied-model-price__card--tokusapo-plus
-                # Inside it, look for "支払総額"
                 tokusapo_section = page.locator(".mobile-page-u96-app-model-price-applied-model-price__card--tokusapo-plus")
                 if await tokusapo_section.count() > 0:
-                     # Get text of this section to avoid global regex match
                      section_text = await tokusapo_section.text_content()
-                     # Look for "支払総額" followed by number
-                     # "支払総額22,012円"
                      m = re.search(r'支払総額.*?([\d,]+)円', section_text)
                      if m:
                          price_effective_rent = int(m.group(1).replace(',', ''))
                 
                 if price_effective_rent == 0:
-                     # Fallback regex search for "実質負担金"
                      r_match = re.search(r'実質負担金.*?([\d,]+)円', content)
                      if r_match: price_effective_rent = int(r_match.group(1).replace(',', ''))
 
-                # If scrape fails on main model page, try "/price/" subpage?
-                # Softbank usually puts price summary on model top page nicely.
+                # 3. Monthly Payment Phases (SoftBank特有)
+                # 新トクするサポートの各期間の月額を取得
+                monthly_payment_phases_dict = {}  # Use dict to deduplicate by period
+                monthly_payment = 0
                 
-                if price_gross == 0:
-                     pass
-
+                # Pattern: "1～12回" followed by amount, "13～24回", "25～48回"
+                # Try to find payment rows in the pricing section
+                price_rows = await page.locator(".mobile-page-u96-app-model-price-item-row").all()
+                
+                for row in price_rows:
+                    try:
+                        row_text = await row.text_content()
+                        # Check for period patterns like "1～12回"
+                        period_match = re.search(r'(\d+)[～~](\d+)回', row_text)
+                        if period_match:
+                            period = f"{period_match.group(1)}～{period_match.group(2)}回"
+                            
+                            # Skip if already processed this period
+                            if period in monthly_payment_phases_dict:
+                                continue
+                            
+                            # Extract amount - could be a number or "お支払い不要"
+                            if "お支払い不要" in row_text:
+                                amount = 0
+                            else:
+                                amount_match = re.search(r'([\d,]+)円', row_text)
+                                if amount_match:
+                                    amount = int(amount_match.group(1).replace(',', ''))
+                                    # Previously filtered < 100, but 1 yen is valid for campaigns
+                                    if amount < 1:
+                                        print(f"Skipping invalid amount: {amount}")
+                                        continue
+                                else:
+                                    continue
+                            
+                            monthly_payment_phases_dict[period] = amount
+                    except:
+                        continue
+                
+                # Convert dict to list
+                monthly_payment_phases = [{"period": k, "amount": v} for k, v in monthly_payment_phases_dict.items()]
+                
+                # Fallback: Try regex on full content if no rows found
+                if not monthly_payment_phases:
+                    # Look for patterns like "1～12回...3,640円"
+                    phase_patterns = [
+                        (r'1[～~]12回.*?([\d,]+)円', "1～12回"),
+                        (r'13[～~]24回.*?([\d,]+)円', "13～24回"),
+                        (r'25[～~]48回.*?([\d,]+)円', "25～48回"),
+                    ]
+                    for pattern, period in phase_patterns:
+                        m = re.search(pattern, content)
+                        if m:
+                            amount = int(m.group(1).replace(',', ''))
+                            if amount >= 1:  # Accept valid promo amounts like 1 yen
+                                monthly_payment_phases.append({
+                                    "period": period,
+                                    "amount": amount
+                                })
+                    
+                    # Check for "お支払い不要" periods
+                    if "25～48回" not in [p["period"] for p in monthly_payment_phases]:
+                        if re.search(r'25[～~]48回.*?お支払い不要', content):
+                            monthly_payment_phases.append({"period": "25～48回", "amount": 0})
+                
+                # Sort phases by period start number
+                monthly_payment_phases.sort(key=lambda x: int(re.search(r'^(\d+)', x["period"]).group(1)) if re.search(r'^(\d+)', x["period"]) else 0)
+                
+                # Calculate monthly_payment
+                # Use first phase amount if valid, otherwise calculate from 2-year total
+                if monthly_payment_phases and monthly_payment_phases[0]["amount"] >= 1:
+                    monthly_payment = monthly_payment_phases[0]["amount"]
+                elif price_effective_rent > 0:
+                    monthly_payment = price_effective_rent // 24
+                
                 if price_gross > 0:
                      items.append({
                         "carrier": "SoftBank",
                         "model": model_name,
-                        "storage": "最小容量", # Renamed from Lowest
+                        "storage": "最小容量",
                         "price_gross": price_gross,
                         "discount_official": 0,
                         "program_exemption": price_gross - price_effective_rent if price_effective_rent else 0,
                         "points_awarded": 0,
                         "price_effective_rent": price_effective_rent if price_effective_rent else price_gross,
                         "price_effective_buyout": price_gross,
+                        "monthly_payment": monthly_payment,
+                        "monthly_payment_phases": monthly_payment_phases,
                         "variants": [],
                         "url": model_url
                     })
@@ -837,16 +955,19 @@ async def scrape_docomo(page):
                     print(f"  Price extract error for {model_name}: {e}")
 
                 if price_gross > 0:
+                     effective = price_effective_rent if price_effective_rent else price_gross
                      items.append({
                         "carrier": "docomo",
                         "model": model_name,
-                        "storage": "最小容量", # Renamed from Lowest
+                        "storage": "最小容量",
                         "price_gross": price_gross,
                         "discount_official": 0,
                         "program_exemption": price_gross - price_effective_rent if price_effective_rent else 0,
                         "points_awarded": 0,
-                        "price_effective_rent": price_effective_rent if price_effective_rent else price_gross,
+                        "price_effective_rent": effective,
                         "price_effective_buyout": price_gross,
+                        "monthly_payment": effective // 24 if effective > 0 else price_gross // 48,
+                        "monthly_payment_phases": [],
                         "variants": [],
                         "url": p_url
                     })

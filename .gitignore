@@ -15,4 +15,5 @@ venv/
 
 # Project specific
 debug_*.py
+dump_*.py
 *_dump.html
