@@ -1061,28 +1061,27 @@ async def scrape_docomo(page):
                 first_payment = 0
                 subsequent_payment = 0
                 
-                # Pattern: 「賦払金（初回）X円」＋「賦払金（2回目以降）X円」
-                first_match = re.search(r'(?:初回|1回目)[：:\s）)]*([0-9,]+)円', content)
-                subsequent_match = re.search(r'2回目以降[：:\s）)]*([0-9,]+)円', content)
+                # Pattern: 「初回のみX円のお支払い」
+                first_match = re.search(r'初回のみ([0-9,]+)円', content)
                 
                 if first_match:
                     first_payment = int(first_match.group(1).replace(',', ''))
                     # Filter out obviously wrong values (total price instead of monthly)
                     if first_payment > 50000:
                         first_payment = 0
-                if subsequent_match:
-                    subsequent_payment = int(subsequent_match.group(1).replace(',', ''))
-                    if subsequent_payment > 50000:
-                        subsequent_payment = 0
                 
-                if first_payment > 0 and subsequent_payment > 0 and first_payment != subsequent_payment:
-                    monthly_payment_phases = [
-                        {"period": "初回", "amount": first_payment},
-                        {"period": "2〜23回", "amount": subsequent_payment}
-                    ]
-                
-                # Calculate effective first, then monthly_payment
+                # Calculate subsequent payment from effective rent
+                # total = first + (subsequent * 22), so subsequent = (total - first) / 22
                 effective = price_effective_rent if price_effective_rent else price_gross
+                if first_payment > 0 and effective > 0:
+                    subsequent_payment = (effective - first_payment) // 22
+                    if subsequent_payment > 0 and first_payment != subsequent_payment:
+                        monthly_payment_phases = [
+                            {"period": "初回", "amount": first_payment},
+                            {"period": "2〜23回", "amount": subsequent_payment}
+                        ]
+                
+                # Calculate monthly_payment
                 monthly_payment = subsequent_payment if subsequent_payment > 0 else (first_payment if first_payment > 0 else (effective // 23 if effective > 0 else price_gross // 48))
 
                 if price_gross > 0:
