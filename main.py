@@ -273,6 +273,7 @@ async def scrape_rakuten(page):
         traceback.print_exc()
 
     # --- 4. Scrape Monthly Prices from Individual Product Pages ---
+    # --- 4. Scrape Monthly Prices from Individual Product Pages ---
     print("Rakuten: Fetching monthly prices from individual product pages...")
     product_urls = {
         "iPhone 16e": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-16e/",
@@ -286,41 +287,104 @@ async def scrape_rakuten(page):
         "iPhone Air": "https://network.mobile.rakuten.co.jp/product/iphone/iphone-air/",
     }
     
-    monthly_price_map = {}  # model -> monthly_price
+    # Pre-group items by model
+    items_by_model = {}
+    for item in items:
+        m = item["model"]
+        if m not in items_by_model: items_by_model[m] = []
+        items_by_model[m].append(item)
+
     for model_name, product_url in product_urls.items():
+        if model_name not in items_by_model: continue
+        
         try:
-            await page.goto(product_url, wait_until="networkidle")
+            # print(f"  Checking {model_name}")
+            await page.goto(product_url, wait_until="domcontentloaded")
             await page.wait_for_timeout(3000)
             
-            page_text = await page.inner_text("body")
+            # Try to close modal
+            try:
+                await page.locator("button.modal-close, .ui-modal-close").click(timeout=1000)
+            except: pass
+
+            target_items = items_by_model[model_name]
             
-            # Pattern: X円/月 or X,XXX円/月 (monthly price display, including commas)
-            monthly_matches = re.findall(r'([\d,]+)円/月', page_text)
-            if monthly_matches:
-                # Parse prices, removing commas
-                prices = [int(p.replace(',', '')) for p in monthly_matches]
-                # Filter: Device monthly payments are typically >= 1 yen for promos, but plan prices like 1,078円 should be ignored
-                # Real device promotional prices are usually shown as 1円, 78円 etc (very low), or actual device payments (3000+ yen)
-                # To distinguish: if we find a price <= 100 yen, it's likely a device promo price
-                # Otherwise, filter out prices that look like plan prices (1000-2000 range)
-                device_prices = [p for p in prices if p <= 100 or p >= 2000]
-                if device_prices:
-                    min_price = min(device_prices)
-                    monthly_price_map[model_name] = min_price
-                    print(f"  {model_name}: {min_price}円/月 (from page)")
+            # Sort items by storage to maybe align with UI order? Not strictly necessary
+            
+            for item in target_items:
+                storage = item["storage"]
+                
+                try:
+                    # Sequence to reveal lowest price: MNP -> Capacity -> Program -> No Trade-in
+                    
+                    # 0. Ensure MNP is selected (works in EN/JP)
+                    mnp_btn = page.locator("label").filter(has_text="MNP").first
+                    if await mnp_btn.count() > 0:
+                         if await mnp_btn.is_visible():
+                             await mnp_btn.click(force=True)
+                             await page.wait_for_timeout(500)
+
+                    # 1. Click storage button
+                    # Use exact text match for capacity
+                    btn = page.get_by_text(storage, exact=True).first
+                    
+                    if await btn.count() > 0 and await btn.is_visible():
+                        await btn.click(force=True)
+                        await page.wait_for_timeout(1000) # Wait for UI refresh
+                        
+                        # 2. Select Program (48 installments)
+                        # Match "48" in label (robust for '48回', '48 times')
+                        prog_btn = page.locator("label").filter(has_text="48").first
+                        if await prog_btn.count() > 0 and await prog_btn.is_visible():
+                             await prog_btn.click(force=True)
+                             await page.wait_for_timeout(500)
+                        
+                        # 3. Select No Trade-in
+                        # Try Japanese "下取り" then English "Trade-in"
+                        trade_btn = page.locator("label").filter(has_text="下取り").first
+                        if await trade_btn.count() == 0:
+                             trade_btn = page.locator("label").filter(has_text="Trade-in").first
+                        
+                        if await trade_btn.count() > 0 and await trade_btn.is_visible():
+                             await trade_btn.click(force=True)
+                             await page.wait_for_timeout(500)
+                    
+                    content = await page.content()
+                    monthly_price = None
+
+                    # Priority 1: Rakuten Program (1~24回目: X円)
+                    m_prog = re.search(r'1[～~]24回目.*?([\d,]+)円', content)
+                    if m_prog:
+                        monthly_price = int(m_prog.group(1).replace(',', ''))
+                    
+                    # Priority 2: Standard X円/月
+                    if monthly_price is None:
+                         matches = re.findall(r'([\d,]+)円/月', content)
+                         nums = [int(p.replace(',', '')) for p in matches]
+                         # Filter valid device prices
+                         device_prices = [p for p in nums if p <= 100 or p >= 900] 
+                         if device_prices:
+                             monthly_price = min(device_prices)
+
+                    if monthly_price is not None:
+                        # print(f"    {model_name} {storage}: {monthly_price}円/月")
+                        # Update if lower or if current is invalid, but 1263 > 1 so we trust page specific
+                        # If the page specific price is found (e.g. 1263), we use it. 
+                        # But wait, what if Fee page was 1263 and this is 1263? No change.
+                        # What if Fee page was 3000 and this is 1263? Update.
+                        # What if Fee page was 1263 and this finds 3000 (bug)?
+                        # We assume the individual page is more accurate for "Campaigns".
+                        
+                        # Apply update if the price seems like a valid device price
+                        item["monthly_payment"] = monthly_price
+                        item["price_effective_rent"] = monthly_price * 24 
+
+                except Exception as e:
+                    # print(f"    Error processing {storage}: {e}")
+                    pass
+
         except Exception as e:
             print(f"  Error fetching {model_name}: {e}")
-    
-    # Update items with scraped monthly prices
-    for item in items:
-        model = item["model"]
-        if model in monthly_price_map:
-            old_price = item["monthly_payment"]
-            new_price = monthly_price_map[model]
-            if new_price < old_price:
-                item["monthly_payment"] = new_price
-                # Also update price_effective_rent to match
-                item["price_effective_rent"] = new_price * 24
 
     print(f"Rakuten: Found {len(items)} items")
     return items
