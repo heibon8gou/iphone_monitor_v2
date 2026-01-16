@@ -7,6 +7,18 @@ import re
 
 DATA_FILE = "docs/data.json"
 
+def get_default_storage(model_name):
+    """Returns the base storage capacity for a given model."""
+    name = model_name.lower()
+    if "pro max" in name:
+        return "256GB"
+    if "air" in name:
+        return "256GB" # Based on Rakuten data
+    if "se" in name:
+        return "64GB"
+    # iPhone 16 Pro, 15 Pro, base models etc start at 128GB
+    return "128GB"
+
 async def scrape_rakuten(page):
     print("Scraping Rakuten Mobile...")
     items = []
@@ -629,11 +641,10 @@ async def scrape_au(page):
                 points_awarded = 0
                 
                 # 4. Storage
-                # au usually defaults to lowest storage. 
-                # Scrapping all storages requires clicking buttons.
-                # For now, let's assume "Start From" price (Lowest Storage).
-                storage = "最小容量"
-                # If we want to capture the storage size from the active button:
+                # Use default base storage based on model name
+                storage = get_default_storage(model_name)
+                
+                # If we can capture the storage size from the active button (unlikely without JS interaction but worth keeping):
                 checked_label = page.locator("label.cmp-form-options__label--checked").first
                 if await checked_label.count() > 0:
                      st_text = await checked_label.text_content()
@@ -824,7 +835,7 @@ async def scrape_softbank(page):
                      items.append({
                         "carrier": "SoftBank",
                         "model": model_name,
-                        "storage": "最小容量",
+                        "storage": get_default_storage(model_name),
                         "price_gross": price_gross,
                         "discount_official": 0,
                         "program_exemption": price_gross - price_effective_rent if price_effective_rent else 0,
@@ -959,7 +970,7 @@ async def scrape_docomo(page):
                      items.append({
                         "carrier": "docomo",
                         "model": model_name,
-                        "storage": "最小容量",
+                        "storage": get_default_storage(model_name),
                         "price_gross": price_gross,
                         "discount_official": 0,
                         "program_exemption": price_gross - price_effective_rent if price_effective_rent else 0,

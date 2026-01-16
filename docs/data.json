@@ -796,7 +796,7 @@
     {
       "carrier": "au",
       "model": "iPhone 16",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 145400,
       "discount_official": 0,
       "program_exemption": 79900,
@@ -811,7 +811,7 @@
     {
       "carrier": "au",
       "model": "iPhone 17 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 203900,
       "discount_official": 0,
       "program_exemption": 112000,
@@ -826,7 +826,7 @@
     {
       "carrier": "au",
       "model": "iPhone Air",
-      "storage": "最小容量",
+      "storage": "256GB",
       "price_gross": 182900,
       "discount_official": 0,
       "program_exemption": 101500,
@@ -841,7 +841,7 @@
     {
       "carrier": "au",
       "model": "iPhone 17 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 229900,
       "discount_official": 0,
       "program_exemption": 129500,
@@ -856,7 +856,7 @@
     {
       "carrier": "au",
       "model": "iPhone 17 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 203900,
       "discount_official": 0,
       "program_exemption": 112000,
@@ -871,7 +871,7 @@
     {
       "carrier": "au",
       "model": "iPhone 16e",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 112800,
       "discount_official": 0,
       "program_exemption": 74253,
@@ -886,7 +886,7 @@
     {
       "carrier": "au",
       "model": "iPhone 17",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 141900,
       "discount_official": 0,
       "program_exemption": 76900,
@@ -901,7 +901,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone Air",
-      "storage": "最小容量",
+      "storage": "256GB",
       "price_gross": 193680,
       "discount_official": 0,
       "program_exemption": 149668,
@@ -929,7 +929,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 15 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 163440,
       "discount_official": 0,
       "program_exemption": 0,
@@ -949,7 +949,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 17",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 159840,
       "discount_official": 0,
       "program_exemption": 132860,
@@ -977,7 +977,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 16",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 145440,
       "discount_official": 0,
       "program_exemption": 123428,
@@ -1005,7 +1005,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 14",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 95904,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1025,7 +1025,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone SE（第3世代）",
-      "storage": "最小容量",
+      "storage": "64GB",
       "price_gross": 73440,
       "discount_official": 0,
       "program_exemption": 62428,
@@ -1053,7 +1053,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 16 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 188640,
       "discount_official": 0,
       "program_exemption": 117960,
@@ -1081,7 +1081,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 16e",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 119088,
       "discount_official": 0,
       "program_exemption": 114108,
@@ -1109,7 +1109,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 15",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 119088,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1129,7 +1129,7 @@
     {
       "carrier": "SoftBank",
       "model": "iPhone 17 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 219600,
       "discount_official": 0,
       "program_exemption": 170088,
@@ -1157,7 +1157,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone 17",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 76560,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1172,7 +1172,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone 16e",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 58080,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1187,7 +1187,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone 17 Pro",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 97680,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1202,7 +1202,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone Air",
-      "storage": "最小容量",
+      "storage": "256GB",
       "price_gross": 88440,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1217,7 +1217,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone 17 Pro Max",
-      "storage": "最小容量",
+      "storage": "256GB",
       "price_gross": 109560,
       "discount_official": 0,
       "program_exemption": 0,
@@ -1232,7 +1232,7 @@
     {
       "carrier": "docomo",
       "model": "iPhone 16",
-      "storage": "最小容量",
+      "storage": "128GB",
       "price_gross": 66792,
       "discount_official": 0,
       "program_exemption": 0,
