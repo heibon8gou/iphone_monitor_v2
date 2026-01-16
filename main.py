@@ -739,7 +739,7 @@ async def scrape_au(page):
                         "points_awarded": points_awarded,
                         "price_effective_rent": price_effective_rent,
                         "price_effective_buyout": price_effective_buyout,
-                        "monthly_payment": price_effective_rent // 24 if price_effective_rent > 0 else price_gross // 48,
+                        "monthly_payment": price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48,
                         "monthly_payment_phases": [],
                         "variants": [],
                         "url": model_url
