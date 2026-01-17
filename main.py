@@ -659,6 +659,19 @@ async def scrape_au(page):
         # Filter for recent iPhones to capture relevant data
         target_urls = [u for u in unique_urls if any(m in u for m in ["iphone-17", "iphone-air", "iphone-16", "iphone-15", "iphone-14", "iphone-se"])]
         
+        # Ensure Pro Max URLs are included (sometimes linked with ?device= parameter)
+        # Add known Pro Max URL patterns if not already present
+        pro_max_additions = [
+            "https://www.au.com/iphone/product/iphone-17-pro/?device=a3525",  # iPhone 17 Pro Max
+            "https://www.au.com/iphone/product/iphone-16-pro/?device=a3295",  # iPhone 16 Pro Max
+        ]
+        for pm_url in pro_max_additions:
+            if pm_url not in target_urls:
+                # Only add if base URL exists (meaning this Pro series is available)
+                base_url = pm_url.split("?")[0]
+                if any(base_url in u for u in target_urls):
+                    target_urls.append(pm_url)
+        
         print(f"au: Found {len(target_urls)} model URLs")
 
         for model_url in target_urls:
@@ -667,20 +680,22 @@ async def scrape_au(page):
                 await page.goto(model_url, wait_until="domcontentloaded")
                 await page.wait_for_timeout(3000)
                 
-                # Model Name
-                title = await page.title()
+                # Model Name - get from page title
                 model_name = "Unknown iPhone"
+                title = await page.title()
                 if "iPhone" in title:
-                    # Extract "iPhone 16" etc from title "iPhone 16（...）| au"
-                    # Capture until delimiter, including 【 for "iPhone 17【予約"
                     m = re.search(r'(iPhone\s?[^|（(・【]+)', title)
                     if m: 
                         model_name = m.group(1).strip()
-                        # Remove "の予約" or similar trailing garbage if regex missed it
                         model_name = re.sub(r'の予約.*', '', model_name)
                         model_name = model_name.replace("予約", "").strip()
                 
+                # Check if this is a Pro Max page via URL param or page content
                 content = await page.content()
+                if "?device=" in model_url and "Pro Max" in content:
+                    # Override model name if Pro Max is selected
+                    if "Pro Max" not in model_name and "Pro" in model_name:
+                        model_name = model_name.replace("Pro", "Pro Max")
                 
                 # 1. Gross Price (Cash Price)
                 price_gross = 0
@@ -692,19 +707,16 @@ async def scrape_au(page):
                 price_effective_rent = 0
                 
                 # Look for "スマホトクするプログラム" block
-                # We use locator to find the section then find the price inside
                 program_sections = await page.locator("div.program-inner").all()
                 for section in program_sections:
                     text = await section.text_content()
                     if "スマホトクするプログラム" in text and "実質負担額" in text:
-                        # Find the price element inside this section
-                        # Usually .text-amount-price strong
                         price_el = section.locator(".text-amount-price strong").first
                         if await price_el.count() > 0:
                             p_text = await price_el.text_content()
                             price_effective_rent = int(p_text.replace(',', ''))
                             break
-                            
+                
                 # 3. Monthly Payment Phases (au: 初回/2回目以降)
                 monthly_payment_phases = []
                 first_payment = 0
@@ -724,48 +736,44 @@ async def scrape_au(page):
                         {"period": "初回", "amount": first_payment},
                         {"period": "2〜23回", "amount": subsequent_payment}
                     ]
-                            
+                
                 # 4. Points (Optional, usually 0 for carrier base unless campaign)
                 points_awarded = 0
                 
-                # 5. Storage
-                # Use default base storage based on model name
+                # 5. Storage - Use default base storage based on model name
                 storage = get_default_storage(model_name)
                 
-                # If we can capture the storage size from the active button (unlikely without JS interaction but worth keeping):
+                # If we can capture the storage size from the active button:
                 checked_label = page.locator("label.cmp-form-options__label--checked").first
                 if await checked_label.count() > 0:
-                     st_text = await checked_label.text_content()
-                     if "GB" in st_text or "TB" in st_text:
-                         storage = st_text.strip()
+                    st_text = await checked_label.text_content()
+                    if "GB" in st_text or "TB" in st_text:
+                        storage = st_text.strip()
                 
                 # Calc logic
                 discount_official = 0 
-                # If Effective rent is significantly lower, it implies program.
-                # Program Exemption = Gross - Rent (roughly)
                 program_exemption = 0
-                price_effective_buyout = price_gross # Usually same as gross unless points
+                price_effective_buyout = price_gross
                 
                 if price_effective_rent > 0 and price_gross > 0:
                     program_exemption = price_gross - price_effective_rent
                 elif price_effective_rent == 0 and price_gross > 0:
-                     # If no program price found, effective rent is gross
-                     price_effective_rent = price_gross
+                    price_effective_rent = price_gross
 
-                # Calculate monthly_payment (use subsequent for display, or first if no phases)
+                # Calculate monthly_payment
                 monthly_payment = subsequent_payment if subsequent_payment > 0 else (first_payment if first_payment > 0 else (price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48))
 
                 if price_gross > 0:
-                     # Deduplication: Check if this model+storage already exists
-                     existing = next((i for i in items if i['model'] == model_name and i['storage'] == storage), None)
-                     if existing:
-                         # Keep the cheaper one
-                         if monthly_payment < existing['monthly_payment']:
-                             items.remove(existing)
-                         else:
-                             continue  # Skip this more expensive duplicate
-                     
-                     items.append({
+                    # Deduplication: Check if this model+storage already exists
+                    existing = next((i for i in items if i['model'] == model_name and i['storage'] == storage), None)
+                    if existing:
+                        # Keep the cheaper one
+                        if monthly_payment < existing['monthly_payment']:
+                            items.remove(existing)
+                        else:
+                            continue  # Skip this more expensive duplicate
+                    
+                    items.append({
                         "carrier": "au",
                         "model": model_name,
                         "storage": storage,
