@@ -756,6 +756,15 @@ async def scrape_au(page):
                 monthly_payment = subsequent_payment if subsequent_payment > 0 else (first_payment if first_payment > 0 else (price_effective_rent // 23 if price_effective_rent > 0 else price_gross // 48))
 
                 if price_gross > 0:
+                     # Deduplication: Check if this model+storage already exists
+                     existing = next((i for i in items if i['model'] == model_name and i['storage'] == storage), None)
+                     if existing:
+                         # Keep the cheaper one
+                         if monthly_payment < existing['monthly_payment']:
+                             items.remove(existing)
+                         else:
+                             continue  # Skip this more expensive duplicate
+                     
                      items.append({
                         "carrier": "au",
                         "model": model_name,
