@@ -659,18 +659,17 @@ async def scrape_au(page):
         # Filter for recent iPhones to capture relevant data
         target_urls = [u for u in unique_urls if any(m in u for m in ["iphone-17", "iphone-air", "iphone-16", "iphone-15", "iphone-14", "iphone-se"])]
         
-        # Ensure Pro Max URLs are included (sometimes linked with ?device= parameter)
-        # Add known Pro Max URL patterns if not already present
-        pro_max_additions = [
+        # Ensure Pro and Pro Max URLs are included (sometimes not linked from main page)
+        # Add known model URLs directly
+        additional_urls = [
+            "https://www.au.com/iphone/product/iphone-17-pro/",           # iPhone 17 Pro
             "https://www.au.com/iphone/product/iphone-17-pro/?device=a3525",  # iPhone 17 Pro Max
+            "https://www.au.com/iphone/product/iphone-16-pro/",           # iPhone 16 Pro
             "https://www.au.com/iphone/product/iphone-16-pro/?device=a3295",  # iPhone 16 Pro Max
         ]
-        for pm_url in pro_max_additions:
-            if pm_url not in target_urls:
-                # Only add if base URL exists (meaning this Pro series is available)
-                base_url = pm_url.split("?")[0]
-                if any(base_url in u for u in target_urls):
-                    target_urls.append(pm_url)
+        for add_url in additional_urls:
+            if add_url not in target_urls:
+                target_urls.append(add_url)
         
         print(f"au: Found {len(target_urls)} model URLs")
 
